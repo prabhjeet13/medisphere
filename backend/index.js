@@ -10,10 +10,10 @@ const adminRoutes = require('./Routes/Admin');
 const patientRoutes = require('./Routes/Patient');;
 const specializationRoutes = require('./Routes/Specialization');
 const doctorRoutes = require('./Routes/Doctor');
-app.use(adminRoutes);
-app.use(patientRoutes);
-app.use(specializationRoutes);
-app.use(doctorRoutes);
+app.use('/api/v1',adminRoutes);
+app.use('/api/v1',patientRoutes);
+app.use('/api/v1',specializationRoutes);
+app.use('/api/v1',doctorRoutes);
 
 
 // built-in middlewares for parsing data

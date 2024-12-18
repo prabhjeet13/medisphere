@@ -50,6 +50,23 @@ const DoctorSchema = new mongoose.Schema({
     patients : [{
         type : mongoose.Types.ObjectId,
         ref : 'Patient',
+    }],
+
+    availability : [{
+        date : {
+            type : Date,
+        },
+        time_slots: [{
+            start_time : {
+                type : String,
+            },
+            end_time : {
+                type : String,
+            },
+            booked : {
+                type : Boolean,
+            },
+        }],
     }]
 })
 
