@@ -28,5 +28,9 @@ app.listen(PORT, () => {
 });
 
 
+// db
+const {dbConnect} = require('./Config/Database');
+dbConnect();
+
 
 

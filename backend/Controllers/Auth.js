@@ -4,6 +4,7 @@ const Doctor = require('../Models/Doctor');
 const Patient = require('../Models/Patient');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 exports.signupAdmin = async (req,res) => {
     try {
@@ -139,7 +140,6 @@ exports.signupDoctor = async (req,res) => {
     }
 }
 
-
 exports.signinAdmin = async (req,res) => {
     try {
         const {email , password} = req.body;
@@ -171,7 +171,7 @@ exports.signinAdmin = async (req,res) => {
                 email : admindetails.email,
                 account_type : admindetails.account_type,
             }
-            const token = jwt.sign(payload,{
+            const token = jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn : "5h",
             });    
 
@@ -228,7 +228,7 @@ exports.signinPatient = async (req,res) => {
                 email : patientdetails.email,
                 account_type : patientdetails.account_type,
             }
-            const token = jwt.sign(payload,{
+            const token = jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn : "5h",
             });    
 
@@ -282,7 +282,7 @@ exports.signinDoctor = async (req,res) => {
                 email : doctordetails.email,
                 account_type : doctordetails.account_type,
             }
-            const token = jwt.sign(payload,{
+            const token = jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn : "5h",
             });    
 

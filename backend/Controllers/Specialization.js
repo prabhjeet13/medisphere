@@ -1,6 +1,6 @@
 const Specialization = require('../Models/Specialization');
 
-exports.addspecialization = async () => {
+exports.addSpecialization = async (req,res) => {
     try {
         
         const {name,description} = req.body;

@@ -38,12 +38,9 @@ exports.getPatientById = async (req,res) => {
     }
 }
 
-
 exports.editPatientDetails = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone} = req.body;
-
-        const userId = req.user;
+        const {first_name,last_name,email,phone,userId} = req.body;
 
         if(!first_name || !last_name || !email || !phone || !userId)
         {
@@ -70,7 +67,10 @@ exports.editPatientDetails = async (req,res) => {
     }catch(error) {
         return res.status(500).json({
             success : false,
-            message : 'server error at sign up patient',
+            message : 'server error at editing patient',
         });
     }
 }
+
+
+// appointment and chating

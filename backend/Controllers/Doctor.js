@@ -33,9 +33,9 @@ exports.editDoctorDetails = async (req,res) => {
     try {
         const {first_name,last_name,email,phone,license_no,specialization} = req.body;
 
-        const userId = req.user;
+        const {userId} = req.user;
 
-        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !uesrId)
+        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userId)
         {
             return res.status(404).json({
                 success : false,
@@ -129,7 +129,7 @@ exports.getDoctorsBySpeciality = async (req,res) => {
 exports.getDoctorById = async (req,res) => {
     try {
 
-        const userId = req.user;
+        const {userId} = req.body;
 
         if(!userId) {
             return res.status(404).json({
