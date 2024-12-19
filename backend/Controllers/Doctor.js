@@ -31,11 +31,11 @@ exports.getMyPatients = async (req,res) => {
 
 exports.editDoctorDetails = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,license_no,specialization} = req.body;
+        const {first_name,last_name,email,phone,license_no,specialization,amount} = req.body;
 
         const {userid} = req.user;
 
-        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userid)
+        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userid || !amount)
         {
             return res.status(404).json({
                 success : false,
@@ -60,7 +60,8 @@ exports.editDoctorDetails = async (req,res) => {
                 email : email,
                 phone : phone,
                 license_no : license_no,
-                specialization : specialization
+                specialization : specialization,
+                amount : amount,
             },{new : true}).populate('specialization').populate('patients').exec();        
 
 
@@ -79,12 +80,12 @@ exports.editDoctorDetails = async (req,res) => {
 }
 exports.editDoctorAvailability = async (req, res) => {
     try {
-        const { day, start_time, end_time } = req.body;
+        const { date, day, start_time, end_time } = req.body;
         
         const {userid}  = req.user; 
         
 
-        if (!day || !start_time || !end_time || !userid) {
+        if (!date || !day || !start_time || !end_time || !userid) {
             return res.status(404).json({
                 success: false,
                 message: 'Please provide all required details (day, start_time, end_time, and userId).',
@@ -110,7 +111,7 @@ exports.editDoctorAvailability = async (req, res) => {
         }
 
 
-        const existingDay = doctor.availability.find((avail) => avail.day === day);
+        const existingDay = doctor.availability.find((avail) => avail.day === day && avail.date === date);
 
 
         if (!existingDay) {
@@ -120,7 +121,8 @@ exports.editDoctorAvailability = async (req, res) => {
                     start_time,
                     end_time,
                     booked: false
-                }]
+                }],
+                date,
             });
         } else {
             const existingSlot = existingDay.time_slots.find(

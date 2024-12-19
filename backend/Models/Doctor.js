@@ -43,12 +43,12 @@ const DoctorSchema = new mongoose.Schema({
         unique : true,
     },
     specialization : {
-        type : mongoose.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         required: true,
         ref : 'Specialization',
     },
     patients : [{
-        type : mongoose.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'Patient',
     }],
 
@@ -72,7 +72,7 @@ const DoctorSchema = new mongoose.Schema({
         }],
     }],
     appointments : [{
-        type : mongoose.Types.ObjectId,
+        type : mongoose.Schema.Types.ObjectId,
         ref : 'Appointment' 
     }],
     amount: { 

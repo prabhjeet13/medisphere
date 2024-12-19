@@ -2,8 +2,8 @@ const Patient = require('../Models/Patient');
 const Doctor = require('../Models/Doctor');
 const Appointment = require('../Models/Appointment');
 const {sendMail} = require('../Utils/Nodemailer');
-
-
+const {instance} = require('../Config/Razorpay');
+const crypto = require('crypto');
 exports.getPatientById = async (req,res) => {
     try {
 
@@ -79,10 +79,10 @@ exports.editPatientDetails = async (req,res) => {
 }
 
 // appointment
-exports.appointment = async (req,res) => {
+exports.appointment_capturePayment = async (req,res) => {
     try {
         
-        const { doctorId, day, date,start_time, end_time} = req.body;
+        const { doctorId, day, date,start_time, end_time,amount} = req.body;
 
         const {userid} = req.user; // patient id
 
@@ -131,34 +131,26 @@ exports.appointment = async (req,res) => {
             });
         }
 
-            // payment logic here           
-        timeSlot.booked = true;
-        if (!doctor.patients.includes(userid)) {
-            doctor.patients.push(userid);
+        // payment logic here   
+        const options = {
+            amount : amount*100,
+            currency: "INR",
+            receipt : Math.random(Date.now()).toString(),
         }
+        
+        try {
+            const paymentResponse = await instance.orders.create(options);
     
-            const appointment = await Appointment.create({
-                doctor : doctorId,
-                patient : userid,
-                day,
-                date,
-                start_time,
-                end_time,
-                status : 'next',
-            });
-        doctor.appointments.push(appointment._id);    
-        patient.appointments.push(appointment._id);    
-        await doctor.save();    
-        await patient.save();
-        await sendMail(doctor.email,` MediSphere - appointment with ${patient.first_name}`,`${appointment}`);    
-        await sendMail(patient.email,` MediSphere - appointment with Dr. ${doctor.first_name}`,`${appointment}`);    
-        let doctordetails = await Doctor.findById(doctorId).populate('patients').populate('specialization').exec();
-        return res.status(200).json({
-            success: true,
-            message: 'Appointment booked successfully',
-            doctordetails,
-        });
-
+            res.json({
+                success: true,
+                message : paymentResponse
+            })
+        }catch(error) {
+            res.json({
+                success: false,
+                message : error.message,
+            }) 
+        }
     }catch(error) {
             return res.status(500).json({
                 success: false,
@@ -166,6 +158,76 @@ exports.appointment = async (req,res) => {
             });
     }    
 }
+
+
+exports.appointment_verifyPayment = async(req,res) => {
+    try {
+        
+        const razorpay_order_id = req.body.razorpay_order_id;
+        const razorpay_payment_id = req.body.razorpay_payment_id;
+        const razorpay_signature = req.body?.razorpay_signature;
+        const {doctorId, day, date,start_time, end_time,amount} = req.body;
+        
+        const userid = req.user.userid;
+
+        if(!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !doctorId || !day || !date || !start_time || !end_time || !userid){
+            res.json({
+                success: false,
+                message : 'payment failed',
+            }) 
+        }
+
+        let body = razorpay_order_id + "|" + razorpay_payment_id;
+        const expectedSignature = crypto.createHmac('sha256',process.env.RAZORPAY_SECRET)
+                                        .update(body.toString())
+                                        .digest("hex");
+
+        if(expectedSignature === razorpay_signature)
+        {
+            const doctor = await Doctor.findById(doctorId); 
+            const patient = await Patient.findById(userid);
+            const existDay = await doctor.availability.find((avail) => avail.day == day && avail.date === date);
+            const timeSlot = await existDay.time_slots((slot) => slot.start_time === start_time && slot.end_time === end_time && slot.booked === false );
+            timeSlot.booked = true;
+            if (!doctor.patients.includes(userid)) {
+                doctor.patients.push(userid);
+            }
+    
+            const appointment = await Appointment.create({
+                    doctor : doctorId,
+                    patient : userid,
+                    day,
+                    date,
+                    start_time,
+                    end_time,
+                    status : 'next',
+                    amount,
+            });
+            doctor.appointments.push(appointment._id);    
+            patient.appointments.push(appointment._id);    
+            await doctor.save();    
+            await patient.save();
+            await sendMail(doctor.email,` MediSphere - appointment with ${patient.first_name}`,`${appointment}`);    
+            await sendMail(patient.email,` MediSphere - appointment with Dr. ${doctor.first_name}`,`${appointment}`);    
+            // let doctordetails = await Doctor.findById(doctorId).populate('patients').populate('specialization').exec();
+            return res.status(200).json({
+                success: true,
+                message : 'payment verified',
+            })
+        }
+        return res.status(500).json({
+            success: false,
+            message : 'payment not verified',
+        });
+
+    }catch(error) {
+        return res.status(500).json({
+            success: false,
+            message : `${error}`,
+        });
+    }
+}
+
 
 
 // const doctorDetails = await Doctor.findByIdAndUpdate({_id : doctorId},{

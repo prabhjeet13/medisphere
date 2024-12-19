@@ -192,9 +192,9 @@ exports.signupPatient = async (req,res) => {
 }
 exports.signupDoctor = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,account_type,password,confirmPassword,license_no,specialization,otp} = req.body;
+        const {first_name,last_name,email,phone,account_type,password,confirmPassword,license_no,specialization,otp,amount} = req.body;
 
-        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp)
+        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount)
         {
             return res.status(404).json({
                 success : false,
@@ -232,7 +232,8 @@ exports.signupDoctor = async (req,res) => {
                 password : hashedpassword,
                 phone: phone,
                 license_no : license_no,
-                specialization : specialization
+                specialization : specialization,
+                amount : amount
         });
 
         return res.status(200).json({
