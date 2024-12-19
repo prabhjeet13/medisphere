@@ -277,3 +277,25 @@ exports.getDoctorById = async (req,res) => {
     }
 }
 
+
+exports.myAppointments = async (req,res) => {
+    try {
+        const {userid} = req.user;
+
+        const details = await Appointment.find({doctor : userid});
+
+        return res.status(200).json({
+            success : true,
+            message : 'fetched ok',
+            details,
+        });
+    }catch(error) {
+        return res.status(500).json({
+            success : false,
+            message : 'error at fetching next appoints',
+        });
+    }
+}
+
+
+

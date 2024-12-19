@@ -35,6 +35,10 @@ const PatientSchema = new mongoose.Schema({
         type : String,
         required : true, 
     },
+    appointments : [{
+            type : mongoose.Types.ObjectId,
+            ref : 'Appointment' 
+    }]
 })
 
 

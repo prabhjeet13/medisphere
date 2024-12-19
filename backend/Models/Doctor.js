@@ -56,6 +56,9 @@ const DoctorSchema = new mongoose.Schema({
         day : {
             type : String,
         },
+        date : {
+            type: Date,
+        },
         time_slots: [{
             start_time : {
                 type : String,
@@ -67,7 +70,15 @@ const DoctorSchema = new mongoose.Schema({
                 type : Boolean,
             },
         }],
-    }]
+    }],
+    appointments : [{
+        type : mongoose.Types.ObjectId,
+        ref : 'Appointment' 
+    }],
+    amount: { 
+        type: Number, 
+        required: true 
+    }
 })
 
 module.exports = mongoose.model('Doctor',DoctorSchema);
