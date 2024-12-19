@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const {addSpecialization} = require('../Controllers/Specialization');
+const {addSpecialization,getallSpecializations} = require('../Controllers/Specialization');
 const {auth,isAdmin} = require('../Middlewares/Auth');
 router.post('/addspecialiation',auth,isAdmin,addSpecialization);
+router.get('/getallSpecializations',getallSpecializations);
 
 module.exports = router;

@@ -13,7 +13,7 @@ exports.getPatientById = async (req,res) => {
             })
         }
 
-        const details = Patient.findById(userId);
+        const details = await Patient.findById(userId);
 
         if(!details)
         {
@@ -40,9 +40,11 @@ exports.getPatientById = async (req,res) => {
 
 exports.editPatientDetails = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,userId} = req.body;
+        const {first_name,last_name,email,phone} = req.body;
 
-        if(!first_name || !last_name || !email || !phone || !userId)
+        const {userid} = req.user;
+
+        if(!first_name || !last_name || !email || !phone || !userid)
         {
             return res.status(404).json({
                 success : false,
@@ -51,7 +53,7 @@ exports.editPatientDetails = async (req,res) => {
         }
 
         const patientdetails = await Patient.findByIdAndUpdate
-        ( {_id : userId},
+        ( {_id : userid},
         { 
                 first_name : first_name,
                 last_name : last_name,
@@ -72,9 +74,7 @@ exports.editPatientDetails = async (req,res) => {
     }
 }
 
-
 // appointment
-
 exports.appointment = async (req,res) => {
     try {
         const { doctorId, patientId, date, timeSlot } = req.body;

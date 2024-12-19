@@ -53,8 +53,8 @@ const DoctorSchema = new mongoose.Schema({
     }],
 
     availability : [{
-        date : {
-            type : Date,
+        day : {
+            type : String,
         },
         time_slots: [{
             start_time : {

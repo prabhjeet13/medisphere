@@ -29,3 +29,22 @@ exports.addSpecialization = async (req,res) => {
         });
     }
 }
+
+exports.getallSpecializations = async (req,res) => {
+    try {
+        
+    
+        const details = await Specialization.find({});
+
+        return res.status(202).json({
+            success : true,
+            message : 'speciality fetched',
+            data : details,
+        });
+    }catch(error) {
+        return res.status(500).json({
+            success : false,
+            message : 'some error at spcialization adding',
+        });
+    }
+}

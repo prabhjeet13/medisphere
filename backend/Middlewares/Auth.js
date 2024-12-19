@@ -4,11 +4,11 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-exports.auth = (req,res,next) => {
+exports.auth = async (req,res,next) => {
     try {
-
-       const token = req.cookie.token || req.body; 
-       
+    //    console.log(req.body); 
+       const {token} = req.body || req.cookies.token; 
+    //    console.log('ffhfhf',token);
        if(!token){
          return res.status(404).json({
             success : false,

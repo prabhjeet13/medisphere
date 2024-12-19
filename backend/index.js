@@ -4,22 +4,24 @@ const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 
+// built-in middlewares for parsing data
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(express.json());
 
 //routes
 const adminRoutes = require('./Routes/Admin');
 const patientRoutes = require('./Routes/Patient');;
 const specializationRoutes = require('./Routes/Specialization');
 const doctorRoutes = require('./Routes/Doctor');
-app.use('/api/v1',adminRoutes);
-app.use('/api/v1',patientRoutes);
-app.use('/api/v1',specializationRoutes);
-app.use('/api/v1',doctorRoutes);
+const otpRoutes = require('./Routes/Otp');
+app.use('/api/v1/admin',adminRoutes);
+app.use('/api/v1/patient',patientRoutes);
+app.use('/api/v1/specialization',specializationRoutes);
+app.use('/api/v1/doctor',doctorRoutes);
+app.use('/api/v1/otp',otpRoutes);
 
 
-// built-in middlewares for parsing data
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
-app.use(express.json());
 
 
 // listening port
