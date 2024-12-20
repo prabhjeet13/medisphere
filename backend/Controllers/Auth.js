@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Otp = require('../Models/Otp');
 const otpgen = require('otp-generator');
+const {sendMail} = require('../Utils/Nodemailer');
 require('dotenv').config();
 
 exports.sendOtp = async(req,res) => {
@@ -73,6 +74,11 @@ exports.sendOtp = async(req,res) => {
         const otpdata = await Otp.create({
           email : email,
           otp : otp,
+        });
+
+        return res.status(200).json({
+            success : true,
+            message : 'otp sent',
         });
 
     }catch(error) {
@@ -236,6 +242,8 @@ exports.signupDoctor = async (req,res) => {
                 amount : amount
         });
 
+        await sendMail(doctordetails.email,'MediShpere - Notice','No Worries, Your data is with us, Wait for approval from the our admins. Till then , You can not access our website.');
+        
         return res.status(200).json({
             success : true,
             message : 'welcome doctor !!!',

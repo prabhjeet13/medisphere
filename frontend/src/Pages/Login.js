@@ -3,11 +3,11 @@ import imagesignup from '../assets/images/doctorimage2.jpg'
 import imagebg from '../assets/images/imagebg.jpg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 const Login = () => {
-    // const navigate = useNavigate();
-    // const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [showpassword,setshowpassword] = useState(false);
     const [formData,setFormData] = useState({
-      emailAddress: "",
+      email: "",
       password : "",
     });
   
@@ -21,6 +21,7 @@ const Login = () => {
   
     const onSubmitHandler = (e) => {
           e.preventDefault();
+          login(formData,dispatch,navigate);
         //   signIn(navigate,formData,dispatch);
     }
   return (
@@ -30,8 +31,8 @@ const Login = () => {
           <p className='text-xl font-semibold font-mono uppercase'> welcome again to medisphere !!!</p>
           <form className='flex flex-col gap-5 font-semibold' onSubmit={onSubmitHandler}>
               <div className='flex flex-col gap-1'>
-                  <label htmlFor='emailAddress'>emailAddress</label>
-                  <input onChange = {textboxvaluechange} value = {formData.emailAddress} type= 'text' name = 'emailAddress' id = 'emailAddress' placeholder='emailAddress' className='bg-white py-2 rounded-md  text-black border-2 border-black' required/>
+                  <label htmlFor='email'>email</label>
+                  <input onChange = {textboxvaluechange} value = {formData.email} type= 'text' name = 'email' id = 'email' placeholder='email' className='bg-white py-2 rounded-md  text-black border-2 border-black' required/>
               </div>
 
               <div className='flex flex-col gap-1 relative'>
@@ -46,8 +47,8 @@ const Login = () => {
       </div>
       {/* image section */}
       <div className='md:w-[40%] relative max-500:invisible sm:w-[50%]'>
-          <img src = {imagebg} className='absolute -right-3 -top-32'></img>
-          <img src={imagesignup} className='absolute right-1 -top-28'></img>
+          <img src = {imagebg} className='absolute -right-3 -top-32 rounded-md'></img>
+          <img src={imagesignup} className='absolute right-1 -top-28 rounded-md'></img>
       </div>
     </div>
   )
