@@ -2,26 +2,28 @@ import React , {useState} from 'react'
 import imagesignup from '../assets/images/doctorimage2.jpg'
 import imagebg from '../assets/images/imagebg.jpg'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {signin} from '../services/db_functions';
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [acc,setacc] = useState('patient');
     const [showpassword,setshowpassword] = useState(false);
     const [formData,setFormData] = useState({
       email: "",
       password : "",
     });
-  
     const textboxvaluechange = (e) => {
       setFormData( (prev) => ({
          ...prev,
          [e.target.name] : e.target.value,
       }))
     }
-  
-  
     const onSubmitHandler = (e) => {
           e.preventDefault();
-          login(formData,dispatch,navigate);
+          formData.account_type = acc;
+          signin(formData,dispatch,navigate);
         //   signIn(navigate,formData,dispatch);
     }
   return (
@@ -30,6 +32,15 @@ const Login = () => {
       <div className='md:w-[40%] flex flex-col gap-2 w-11/12'>
           <p className='text-xl font-semibold font-mono uppercase'> welcome again to medisphere !!!</p>
           <form className='flex flex-col gap-5 font-semibold' onSubmit={onSubmitHandler}>
+              <div className='md:flex md:flex-row gap-2 flex flex-col rounded-full bg-red-900 w-fit'>
+                      <div onClick = {() => setacc('patient')} className={`${acc === "patient" ? 'bg-blue-900' : 'bg-transparent'} text-white rounded-full p-2 m-2 cursor-pointer transition-all duration-200 hover:scale-90`}>
+                        Patient    
+                      </div>
+                      <div onClick = {() => setacc('doctor')} className={`${acc === "doctor" ? 'bg-blue-900' : 'bg-transparent'} text-white rounded-full p-2 m-2 cursor-pointer transition-all duration-200 hover:scale-90`}>
+                          Doctor
+                      </div>
+              </div>
+
               <div className='flex flex-col gap-1'>
                   <label htmlFor='email'>email</label>
                   <input onChange = {textboxvaluechange} value = {formData.email} type= 'text' name = 'email' id = 'email' placeholder='email' className='bg-white py-2 rounded-md  text-black border-2 border-black' required/>

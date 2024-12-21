@@ -13,7 +13,7 @@ const Navbar = () => {
             <ul className='flex items-center gap-2 font-mono text-lg font-semibold cursor-pointer'>
                 <li onClick = { () => navigate('/')} className='bg-amber-300 p-1 px-3 rounded-full transition-all duration-200 hover:scale-90'> Home</li>
                 <li onClick = { () => navigate('/about')} className='bg-amber-300 p-1 px-3 rounded-full transition-all duration-200 hover:scale-90'>About</li>
-                <li className='bg-amber-300 p-1 px-3 rounded-full transition-all duration-200 hover:scale-90'>Doctors</li>
+                <li onClick = {() => navigate('/doctors')} className='bg-amber-300 p-1 px-3 rounded-full transition-all duration-200 hover:scale-90'>Doctors</li>
                 <li onClick = { () => navigate('/contact')} className='bg-amber-300 p-1 px-3 rounded-full transition-all duration-200 hover:scale-90'>Contact</li>
             </ul>
 

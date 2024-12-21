@@ -4,10 +4,10 @@ import axios from 'axios';
 import {otp,doctor,patient} from './apis';
 
 import { setSignupData } from '../slices/signupslice';
-import { setUserData } from '../slices/profileSlice';
-exports.sendOtp = async (formData,dispatch,navigate) => {
+import { setUserData , setToken} from '../slices/profileSlice';
+export const sendOtp = async (formData,dispatch,navigate) => {
+    const tid = toast.loading('Sending otp ...');
     try {
-        toast.loading('Sending otp ...');
         const response = await axios.post(otp.sendotp,{email : formData.email, account_type : formData.account_type});
         if(!response.data.success) {
             throw new Error('not able to send otp');
@@ -18,11 +18,12 @@ exports.sendOtp = async (formData,dispatch,navigate) => {
     }catch(error) {
         toast.error('try again later');
     }
+    toast.dismiss(tid);
 }
 
-exports.signup = async (formData,navigate) => {
+export const signup = async (formData,navigate) => {
+    const tid = toast.loading('Saving data ...');
     try {
-        toast.loading('Saving data ...');
         let response = null;    
         if(formData.account_type === "patient")
         {
@@ -38,27 +39,35 @@ exports.signup = async (formData,navigate) => {
     }catch(error) {
         toast.error('try again later');
     }
+    toast.dismiss(tid);
 }
 
-exports.signin = async (formData,dispatch,navigate) => {
+export const signin = async (formData,dispatch,navigate) => {
+    const tid = toast.loading('Saving data ...');
     try {
-        toast.loading('Saving data ...');
         let response = null;    
         
         if(formData.account_type === "patient")
         {
             response = await axios.post(patient.signin,formData);
+            localStorage.setItem('userData',JSON.stringify(response.data.patientdetails));
+            localStorage.setItem('token',JSON.stringify(response.data.token));
+            dispatch(setUserData(response.data.patientdetails));
+            dispatch(setToken(response.data.token));
         }else if(formData.account_type === "doctor") {
             response = await axios.post(doctor.signin,formData);
+            localStorage.setItem('userData',JSON.stringify(response.data.doctordetails));
+            localStorage.setItem('token',JSON.stringify(response.data.token));
+            dispatch(setUserData(response.data.doctordetails));
+            dispatch(setToken(response.data.token));
         }
-
         if(!response.data.success) {
             throw new Error('not able to login in');
         }
         toast.success('loginSuccessfully');
-        dispatch(setUserData(formData));
         navigate('/dashboard/myProfile');
     }catch(error) {
-        toast.error('try again later');
+        toast.error('something wrong - try again later');
     }
+    toast.dismiss(tid);
 }

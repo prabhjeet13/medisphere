@@ -39,7 +39,7 @@ exports.getallSpecializations = async (req,res) => {
         return res.status(202).json({
             success : true,
             message : 'speciality fetched',
-            data : details,
+            details,
         });
     }catch(error) {
         return res.status(500).json({

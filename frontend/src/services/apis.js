@@ -24,7 +24,7 @@ export const admin = {
 
 export const specialization =  {
     add : 'http://localhost:4001/api/v1/specialization/addspecialiation',
-    getall : 'http://localhost:4001/api/v1/specialization/getallSpecializations'
+    getall : 'http://localhost:4001/api/v1/specialization/getallspecializations'
 }
 
 export const otp = {

@@ -42,6 +42,15 @@ const DoctorSchema = new mongoose.Schema({
         trim : true,
         unique : true,
     },
+    location : {
+        type : String,
+        required : true, 
+        trim : true,
+    },
+    about_me : {
+        type : String,
+        required : true,
+    },
     specialization : {
         type : mongoose.Schema.Types.ObjectId,
         required: true,

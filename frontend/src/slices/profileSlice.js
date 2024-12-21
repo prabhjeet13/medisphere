@@ -3,8 +3,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    userData : localStorage.getItem('userData') || null,
-    token : localStorage.getItem('token') || null,
+    userData : localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null,
+    token : localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null,
 }
 
 const profileSlice = createSlice({
@@ -20,5 +20,5 @@ const profileSlice = createSlice({
     }
 });
 
-export const {setUserData, Token} = signupslice.actions;
+export const {setUserData, setToken} = profileSlice.actions;
 export default profileSlice.reducer;

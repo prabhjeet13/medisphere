@@ -1,5 +1,5 @@
 const Doctor = require('../Models/Doctor');
-
+const Specialization = require('../Models/Specialization');
 
 exports.getMyPatients = async (req,res) => {
     try {
@@ -31,11 +31,11 @@ exports.getMyPatients = async (req,res) => {
 
 exports.editDoctorDetails = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,license_no,specialization,amount} = req.body;
+        const {first_name,last_name,email,phone,location,license_no,specialization,amount,about_me} = req.body;
 
         const {userid} = req.user;
 
-        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userid || !amount)
+        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userid || !amount || !location || !about_me)
         {
             return res.status(404).json({
                 success : false,
@@ -62,6 +62,8 @@ exports.editDoctorDetails = async (req,res) => {
                 license_no : license_no,
                 specialization : specialization,
                 amount : amount,
+                location : location,
+                about_me: about_me,
             },{new : true}).populate('specialization').populate('patients').exec();        
 
 
@@ -165,7 +167,7 @@ exports.editDoctorAvailability = async (req, res) => {
 exports.getAllDoctors = async (req,res) => {
     try {
 
-        const details = await Doctor.find({status : 'active'}).exec();
+        const details = await Doctor.find({status : 'active'}).populate('specialization').exec();
 
         if(!details) {
             return res.status(404).json({
@@ -214,7 +216,11 @@ exports.getAllDoctorsPending = async (req,res) => {
 exports.getDoctorsBySpeciality = async (req,res) => {
     try {
 
+        // body mai name arra hai 
+        // and we have stored ids of (specialization) in doctor schema 
         const {specialization} = req.body;
+        // console.log(req.body);
+
         if(!specialization) {
             return res.status(404).json({
                 success : false,
@@ -222,7 +228,17 @@ exports.getDoctorsBySpeciality = async (req,res) => {
             });
         }
 
-        const details = await Doctor.find({specialization : specialization,status : 'active'}).exec();
+
+        const fetchSpeciality_data = await Specialization.findOne({name : specialization});
+
+        if(!fetchSpeciality_data)
+        {
+            return res.status(401).json({
+                success : false,
+                message : 'not found specialization',
+            });
+        }
+        const details = await Doctor.find({specialization : fetchSpeciality_data._id,status : 'active'}).populate('specialization').exec();
 
         return res.status(200).json({
             success : true,

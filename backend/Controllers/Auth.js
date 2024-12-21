@@ -198,9 +198,9 @@ exports.signupPatient = async (req,res) => {
 }
 exports.signupDoctor = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,account_type,password,confirmPassword,license_no,specialization,otp,amount} = req.body;
+        const {first_name,last_name,email,phone,account_type,password,location, confirmPassword,license_no,specialization,otp,amount,about_me} = req.body;
 
-        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount)
+        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount || !location || !about_me)
         {
             return res.status(404).json({
                 success : false,
@@ -239,10 +239,12 @@ exports.signupDoctor = async (req,res) => {
                 phone: phone,
                 license_no : license_no,
                 specialization : specialization,
-                amount : amount
+                amount : amount,
+                location,
+                about_me,
         });
 
-        await sendMail(doctordetails.email,'MediShpere - Notice','No Worries, Your data is with us, Wait for approval from the our admins. Till then , You can not access our website.');
+        await sendMail(doctordetails.email,'MediShpere - Notice','No Worries, Your data is with us, Wait for approval from our admins. Till then , You can not access our website.');
         
         return res.status(200).json({
             success : true,

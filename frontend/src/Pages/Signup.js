@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useEffect, useState } from 'react'
 import imagebg from '../assets/images/imagebg.jpg';
 import imagessignupdoc from '../assets/images/background_doctors.jpg';
 import imagessignuppatients from '../assets/images/doctorimage1.jpg';
@@ -6,12 +6,36 @@ import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
 import {toast} from 'react-hot-toast';
 import {sendOtp} from '../services/db_functions';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {specialization} from '../services/apis';
+import axios from 'axios';
 const Signup = () => {
+  
+    const [specialities,setspecialities] = useState([]);  
+    useEffect( () => {
+      const fetchsp = async () => {
+        try {
+          const response = await axios.get(specialization.getall);
+          if(!response.data.success)
+          {
+              throw new Error("try again later");
+          }else {
+            setspecialities(response.data.details);
+          }
+        }catch(error) {
+          toast.error('Medisphere - server down .. try again');
+        }
+      }
+      fetchsp();
+    },[]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showpassword,setshowpassword] = useState(false);
     const [showconfirmpassword,setshowconfirmpassword] = useState(false);
     const [acc,setacc] = useState('patient');
+
     const [formData,setFormData] = useState({
       first_name: "",
       last_name: "",
@@ -23,9 +47,10 @@ const Signup = () => {
       amount : "",
       license_no : "",
       specialization : "",
-      status : ""
+      status : "",
+      location : "",
+      about_me : "",
     });
-    const [specialities,setspecialities] = useState([]);  
     const textboxvaluechange = (e) => {
       setFormData( (prev) => ({
         ...prev,
@@ -44,10 +69,17 @@ const Signup = () => {
         {
           formData.status = 'active';
         }else {
-          formData.status = 'pending';
-        }
+            formData.status = 'pending';
+          }
+          console.log(formData);
 
         await sendOtp(formData,dispatch,navigate);
+    }
+
+    if(acc === "doctor" && !specialities) {
+      return (
+        <div> Wait for loading of specialities </div>
+      )
     }
   return (
     <div className='mx-auto w-11/12 max-w-[1260px] md:flex md:flex-row items-center justify-evenly md:mt-5 flex flex-col-reverse gap-36'>
@@ -87,7 +119,7 @@ const Signup = () => {
 
                 <div className='flex flex-col md:w-[85%]'>
                   <label htmlFor='phone' className='text-white'> 
-                      phone
+                      mobile
                   </label>
                   <input onChange = {textboxvaluechange} value = {formData.phone} type = 'text' id = 'phone' name = 'phone' placeholder='phone' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
                 </div>
@@ -102,17 +134,41 @@ const Signup = () => {
                     <input onChange = {textboxvaluechange} value = {formData.license_no} type = 'text' id = 'license_no' name = 'license_no' placeholder='license_no' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
                   </div>
 
-                  <div className='flex flex-col md:w-[85%]'>
+                  <div className='flex flex-col md:w-[85%] gap-2'>
                     <label htmlFor='specialization' className='text-white'> 
                       specialization
                     </label>
-                    <input onChange = {textboxvaluechange} value = {formData.specialization} type = 'text' id = 'specialization' name = 'specialization' placeholder='specialization' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
-                 </div>
+                    <select onChange = {textboxvaluechange} value = {formData.specialization} id = 'specialization' name = 'specialization' className='border-2 border-black py-2 rounded-md px-3 text-black'>
+                         <option> select your specialization </option>
+                      {
+                         specialities && specialities.map((sp) => {
+                          return (
+                            <option key = {sp._id}> {sp.name} </option>
+                          )
+                         })
+                      }
+                    </select>
+                    {/* <input onChange = {textboxvaluechange} value = {formData.specialization} type = 'text' id = 'specialization' name = 'specialization' placeholder='specialization' className='border-2 border-black py-2 rounded-md px-3 text-black' required/> */}
+                    </div>
+                    <div className='flex flex-col md:w-[85%]'>
+                    <label htmlFor='location' className='text-white'> 
+                        (clinic/hospital) location:
+                    </label>
+                    <input onChange = {textboxvaluechange} value = {formData.location} type = 'text' id = 'location' name = 'location' placeholder='location' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
+                  </div>
+                 
                   <div className='flex flex-col md:w-[85%]'>
                     <label htmlFor='amount' className='text-white'> 
                       amount
                     </label>
                     <input onChange = {textboxvaluechange} value = {formData.amount} type = 'text' id = 'amount' name = 'amount' placeholder='amount' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
+                 </div>
+
+                  <div className='flex flex-col md:w-[85%]'>
+                    <label htmlFor='amount' className='text-white'> 
+                      about me
+                    </label>
+                    <textarea rows = {5} cols = {5} onChange = {textboxvaluechange} value = {formData.about_me} type = 'text' id = 'about_me' name = 'about_me' placeholder='about_me' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
                  </div>
                   </>
                  )
