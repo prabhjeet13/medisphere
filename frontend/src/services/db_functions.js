@@ -65,7 +65,7 @@ export const signin = async (formData,dispatch,navigate) => {
             throw new Error('not able to login in');
         }
         toast.success('loginSuccessfully');
-        navigate('/dashboard/myProfile');
+        navigate('/dashboard/myprofile');
     }catch(error) {
         toast.error('something wrong - try again later');
     }

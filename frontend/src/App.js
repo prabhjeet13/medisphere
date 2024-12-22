@@ -11,6 +11,8 @@ import Otp from './Pages/Otp';
 import AllDoctors from './Pages/AllDoctors';
 import DoctorsOnSpeciality from './Pages/DoctorsOnSpeciality';
 import Doctor from './Pages/Doctor';
+import MyProfile from './Pages/MyProfile';
+import Dashboard from './Pages/Dashboard';
 function App() {
   return (
     <div className='mx-auto bg-gradient-to-r from-blue-700 to-blue-900 min-h-[100vh]'>
@@ -25,6 +27,9 @@ function App() {
               <Route path='/signup' element = {<Signup/>}> </Route>
               <Route path='/doctors/:speciality' element = {<DoctorsOnSpeciality/>}> </Route>
               <Route path='/doctor/:doctorId' element = {<Doctor/>}> </Route>
+              <Route path='/dashboard' element = {<Dashboard/>}>
+                  <Route path='myprofile' element = {MyProfile}> </Route>
+              </Route>
               <Route path='/otp' element = {<Otp/>}></Route>
         </Routes>
     </div>  

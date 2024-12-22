@@ -9,11 +9,10 @@ import 'react-calendar/dist/Calendar.css';
 const Doctor = () => {
   const { doctorId } = useParams();
   const [doctordata, setdoctordata] = useState(null);
-  const [availability, setAvailability] = useState([]);  // To store availability data
+  const [availability, setAvailability] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
-
-  // Fetch doctor and availability data
+  const [day,setday] = useState('');
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {
@@ -32,27 +31,23 @@ const Doctor = () => {
     fetchDoctorData();
   }, [doctorId]);
 
-
-
-const handleDateClick = (date) => {
+  const handleDateClick = (date) => {
     // Normalize the date by removing the time component (use toDateString or format it to YYYY-MM-DD)
-    const selectedDateStr = date.toDateString(); // or date.toISOString().split('T')[0] for YYYY-MM-DD format
-  
+    const selectedDateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }) // or date.toISOString().split('T')[0] for YYYY-MM-DD format  
+    // console.log(date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
     // Compare with the normalized date string in the availability data
-    const availableDay = availability.find((day) => new Date(day.date).toDateString() === selectedDateStr);
+    const availableDay = availability.find((day) => day.date === selectedDateStr);
       
     if (availableDay) {
-      setSelectedDate(date);
+      setSelectedDate(selectedDateStr);
       setTimeSlots(availableDay.time_slots);  // Set time slots based on selected date
+      setday(availableDay.day);
     } else {
       setSelectedDate(null);
       setTimeSlots([]);
     }
-  };
-  
-
-  // Add CSS class for available days
-  
+  };  
+  // css for day click jb hogi
   const tileClassName = ({ date }) => {
     const dateStr = date.toDateString();  // Format date to YYYY-MM-DD
     const availableDay = availability.find((day) => new Date(day.date).toDateString() === dateStr);
@@ -63,6 +58,40 @@ const handleDateClick = (date) => {
 
     return '';  // No class for unavailable days
   };
+
+
+  const [start,set_start] = useState('');
+  const [end,set_end] = useState('');
+  const [formdata,setformdata]  = useState({
+    day : "",
+    date : "",
+    start_time : "",
+    end_time : "",
+    amount : "",
+    status : "",
+    doctor : "",
+  })
+
+  const onSubmitHandler = async (e) => {
+      e.preventDefault();
+      try {
+         if(doctordata && selectedDate && start && end && timeSlots && day) {
+            formdata.doctor = doctorId;
+            formdata.status = 'next';
+            formdata.start_time = start;
+            formdata.end_time = end;
+            formdata.date = selectedDate;
+            formdata.day = day;
+            formdata.amount = doctordata.amount;
+            console.log(formdata);
+         }else {
+             toast.error('Medisphere - select correct date !')
+         }
+      }catch(error)
+      {
+          toast.error('Medisphere - try again later')
+      }
+  }
 
   // Loading state
   if (!doctordata) {
@@ -76,8 +105,12 @@ const handleDateClick = (date) => {
       {
         doctordata && (
           <div className='flex gap-10'>
-            <div className='flex flex-col gap-14 mt-10 w-[60%] border-2 border-orange-900 p-2'>
+            <div className='flex flex-col gap-6 mt-10 w-[60%] border-8 border-orange-900 p-2'>
               {/* Doctor Details */}
+
+              <div className=' text-black bg-yellow-400 p-2 w-fit rounded-full font-mono font-semibold text-lg transition-all duration-200 hover:scale-90 cursor-pointer'>
+                    Chat with Me ?
+              </div>
               <div className='text-white'>
                 <p className='text-xl underline font-bold'>Doctor Name</p>
                 <div className='text-lg flex items-center font-semibold gap-2'>
@@ -103,6 +136,10 @@ const handleDateClick = (date) => {
               </div>
 
               <div className='text-white'>
+                <p className='underline text-xl font-bold'>Charges</p>
+                <p className='text-white text-lg font-semibold'>{doctordata.amount}</p>
+              </div>
+              <div className='text-white'>
                 <p className='underline text-xl font-bold'>About Me</p>
                 <p className='text-white text-lg font-semibold'>{doctordata.about_me}</p>
               </div>
@@ -116,20 +153,24 @@ const handleDateClick = (date) => {
               <Calendar
                 onClickDay={handleDateClick}  // Handle date click
                 tileClassName={tileClassName} // Apply tile class for available days
+                className= 'font-mono font-semibold text-lg p-2'
               />
                <p className='text-white'>* Green Color dates are available</p> 
 
               {/* Show available time slots */}
               {selectedDate && timeSlots.length > 0 && (
-                <div className='mt-5 text-white'>
+                <div className='mt-5 text-white flex flex-col gap-3  border-2 border-orange-900 p-5 m-2'>
                   <p className='text-xl font-bold underline'>Available Time Slots</p>
-                  <ul>
+                  <form onSubmit = {onSubmitHandler} className='flex flex-col gap-3'>
                     {timeSlots.map((slot, index) => (
-                      <li key={index} className={`text-lg ${slot.booked ? 'line-through' : ''}`}>
-                        {slot.start_time} - {slot.end_time}
-                      </li>
+                      <div className='flex gap-2 items-center'>
+                        <input onChange = {() => {set_start(slot.start_time) ; set_end(slot.end_time)} } type = 'radio' name = 'time_slots' id = 'time_slots' key={index} className={`text-lg font-semibold font-mono ${slot.booked ? 'line-through' : ''}`}>
+                        </input>
+                        <label> {slot.start_time} - {slot.end_time} </label>
+                      </div>
                     ))}
-                  </ul>
+                      <button type = 'submit' className='bg-yellow-500 text-black font-mono p-2 m-2 rounded-full transition-all duration-200  font-semibold hover:scale-90'>Book your Appointment </button>
+                  </form>
                 </div>
               )}
               {selectedDate && timeSlots.length === 0 && (
