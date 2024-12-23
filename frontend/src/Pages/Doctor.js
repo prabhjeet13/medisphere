@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { doctor } from '../services/apis';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
+import {useDispatch, useSelector} from 'react-redux';
+import { do_appointment } from '../services/db_functions';
 const Doctor = () => {
   const { doctorId } = useParams();
   const [doctordata, setdoctordata] = useState(null);
@@ -13,6 +14,11 @@ const Doctor = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [timeSlots, setTimeSlots] = useState([]);
   const [day,setday] = useState('');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {userData,token} = useSelector((state) => state.profile);
+
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {
@@ -37,10 +43,26 @@ const Doctor = () => {
     // console.log(date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }));
     // Compare with the normalized date string in the availability data
     const availableDay = availability.find((day) => day.date === selectedDateStr);
-      
-    if (availableDay) {
+    
+    if(!availableDay)
+    {
+        toast.error('Medisphere - Select only available date');
+        return;
+    }
+  
+    console.log(availableDay);
+    let time_slots = [];
+    for(let slot of availableDay.time_slots)
+    {
+        if(slot.booked === false)
+        {
+          time_slots.push(slot);
+        }
+    }
+    console.log(time_slots);
+    if (availableDay && time_slots && time_slots.length > 0) {
       setSelectedDate(selectedDateStr);
-      setTimeSlots(availableDay.time_slots);  // Set time slots based on selected date
+      setTimeSlots(time_slots);  // Set time slots based on selected date
       setday(availableDay.day);
     } else {
       setSelectedDate(null);
@@ -69,14 +91,27 @@ const Doctor = () => {
     end_time : "",
     amount : "",
     status : "",
-    doctor : "",
+    doctorId : "",
   })
 
   const onSubmitHandler = async (e) => {
       e.preventDefault();
+
+      if(!userData)
+      {
+          toast.error('Medisphere - You are not login So First Login Youself');
+          return;
+      }
+
+      if(userData.account_type === "doctor")
+      {
+          toast.error('Medisphere - only for patients');
+          return;
+      }
+
       try {
-         if(doctordata && selectedDate && start && end && timeSlots && day) {
-            formdata.doctor = doctorId;
+         if(doctordata && selectedDate && start && end && timeSlots && day && userData) {
+            formdata.doctorId = doctorId;
             formdata.status = 'next';
             formdata.start_time = start;
             formdata.end_time = end;
@@ -84,6 +119,8 @@ const Doctor = () => {
             formdata.day = day;
             formdata.amount = doctordata.amount;
             console.log(formdata);
+
+            await do_appointment(formdata,dispatch,navigate,token,userData);
          }else {
              toast.error('Medisphere - select correct date !')
          }
@@ -158,7 +195,7 @@ const Doctor = () => {
                <p className='text-white'>* Green Color dates are available</p> 
 
               {/* Show available time slots */}
-              {selectedDate && timeSlots.length > 0 && (
+              {selectedDate && timeSlots && timeSlots.length > 0 && (
                 <div className='mt-5 text-white flex flex-col gap-3  border-2 border-orange-900 p-5 m-2'>
                   <p className='text-xl font-bold underline'>Available Time Slots</p>
                   <form onSubmit = {onSubmitHandler} className='flex flex-col gap-3'>

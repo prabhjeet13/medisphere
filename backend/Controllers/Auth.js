@@ -328,7 +328,13 @@ exports.signinPatient = async (req,res) => {
         }
 
 
-        const patientdetails = await Patient.findOne({email : email});
+        const patientdetails = await Patient.findOne({email : email}).populate({
+            path: 'appointments', 
+            populate: [
+                { path: 'doctor' },    
+                { path: 'patient' },   
+            ],
+        }).exec();
 
         if(!patientdetails) {
             return res.status(401).json({
@@ -383,7 +389,14 @@ exports.signinDoctor = async (req,res) => {
                 message : 'give all details',
             });
         }
-        const doctordetails = await Doctor.findOne({email : email});
+        const doctordetails = await Doctor.findOne({email : email}).populate('patients').populate('specialization').populate({
+            path: 'appointments', 
+            populate: [
+                { path: 'doctor' },    
+                { path: 'patient' },   
+            ],
+        }).exec();
+
         if(!doctordetails) {
             return res.status(401).json({
                 success : false,

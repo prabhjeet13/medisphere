@@ -1,3 +1,5 @@
+import { do_appointment } from "./db_functions"
+
 export const doctor = {
     signup : 'http://localhost:4001/api/v1/doctor/signupdoctor',
     signin : 'http://localhost:4001/api/v1/doctor/signindoctor',
@@ -7,6 +9,7 @@ export const doctor = {
     getalldoctorsactive : 'http://localhost:4001/api/v1/doctor/getalldoctors',
     getalldoctorspending : 'http://localhost:4001/api/v1/doctor/getalldoctorspending',
     editdoctorAvailaility : 'http://localhost:4001/api/v1/doctor/editdoctoravailability',
+    deleteDoctoravAilability : 'http://localhost:4001/api/v1/doctor/deletedoctoravailability',
 }
 
 export const patient = {
@@ -14,6 +17,9 @@ export const patient = {
     signin : 'http://localhost:4001/api/v1/patient/signinpatient',
     getpatientbyid : 'http://localhost:4001/api/v1/patient/getpatientbyid',
     editdetails : 'http://localhost:4001/api/v1/patient/editpatientdetails',
+    appointment : 'http://localhost:4001/api/v1/patient/appointment_capturePayment',
+    SEND_PAYMENT_EMAIL : 'http://localhost:4001/api/v1/patient/sendpaymentsuccess',
+    VERIFY_PAYMENT_API : 'http://localhost:4001/api/v1/patient/verifysignature',
 }
 
 export const admin = {

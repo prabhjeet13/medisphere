@@ -31,11 +31,10 @@ exports.getMyPatients = async (req,res) => {
 
 exports.editDoctorDetails = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,location,license_no,specialization,amount,about_me} = req.body;
-
+        // console.log(req.body);
+        const {first_name,last_name,phone,location,license_no,specialization,amount,about_me,bank_account_number,ifsc_code} = req.body;
         const {userid} = req.user;
-
-        if(!first_name || !last_name || !email || !phone || !license_no || !specialization || !userid || !amount || !location || !about_me)
+        if(!first_name || !last_name || !phone || !license_no || !specialization || !userid || !amount || !location || !about_me || !bank_account_number || !ifsc_code)
         {
             return res.status(404).json({
                 success : false,
@@ -43,7 +42,8 @@ exports.editDoctorDetails = async (req,res) => {
             });
         }
 
-        const doctordetails = await Doctor.findById(userid);
+        const doctordetails = await Doctor.findById(userid).populate('specialization').exec();
+        // console.log('dd',doctordetails);
 
         if(doctordetails.status !== 'active') {
             return res.status(402).json({
@@ -51,19 +51,19 @@ exports.editDoctorDetails = async (req,res) => {
                 message: 'no permission to do',
             });
         }
-
         const doctor = await Doctor.findByIdAndUpdate(
             {_id : userid},
             {
                 first_name : first_name,
                 last_name : last_name,
-                email : email,
                 phone : phone,
                 license_no : license_no,
-                specialization : specialization,
+                specialization : doctordetails.specialization._id,
                 amount : amount,
                 location : location,
                 about_me: about_me,
+                bank_account_number : bank_account_number,
+                ifsc_code : ifsc_code,
             },{new : true}).populate('specialization').populate('patients').exec();        
 
 
@@ -71,7 +71,7 @@ exports.editDoctorDetails = async (req,res) => {
         return res.status(200).json({
             success : true,
             message : 'eit doctor !!!',
-            doctor
+            details : doctor,
         });
     }catch(error) {
         return res.status(500).json({
@@ -153,7 +153,78 @@ exports.editDoctorAvailability = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Doctor availability updated successfully!',
-            doctordetails,
+            details : doctordetails,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Server error while editing doctor availability.',
+        });
+    }
+};
+exports.deleteDoctorAvailability = async (req, res) => {
+    try {
+        const { date, day, start_time, end_time } = req.body;
+        
+        const {userid}  = req.user; 
+        
+
+        if (!date || !day || !start_time || !end_time || !userid) {
+            return res.status(404).json({
+                success: false,
+                message: 'Please provide all required details (day, start_time, end_time, and userId).',
+            });
+        }
+
+
+        // console.log('eeeheheh',userId);
+
+        const doctor = await Doctor.findById(userid);
+        if (!doctor) {
+            return res.status(404).json({
+                success: false,
+                message: 'Doctor not found',
+            });
+        }
+
+        if(doctor.status !== "active") {
+            return res.status(402).json({
+                success: false,
+                message: 'no permission to do',
+            });
+        }
+
+
+        const existingDay = doctor.availability.find((avail) => avail.day === day && avail.date === date);
+
+
+        if(existingDay)
+        {
+
+            const existingSlot = existingDay.time_slots.find(
+                (slot) => slot.start_time === start_time && slot.end_time === end_time
+            );
+            
+            if(existingSlot) {
+                existingDay.time_slots.remove(existingSlot);
+                if(existingDay.time_slots.length === 0)
+                {
+                    doctor.availability.remove(existingDay);
+                }
+            }    
+        }
+
+
+        await doctor.save();
+
+
+        const doctordetails = await Doctor.findById(userid).populate('specialization').populate('patients').exec();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Doctor availability updated successfully!',
+            details : doctordetails,
         });
 
     } catch (error) {

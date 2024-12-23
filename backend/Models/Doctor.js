@@ -87,7 +87,15 @@ const DoctorSchema = new mongoose.Schema({
     amount: { 
         type: Number, 
         required: true 
-    }
+    },
+    bank_account_number: {
+        type: String,
+        required: true
+      },
+    ifsc_code: {
+        type: String,
+        required: true
+    },
 })
 
 module.exports = mongoose.model('Doctor',DoctorSchema);
