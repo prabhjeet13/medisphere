@@ -4,7 +4,7 @@ exports.addSpecialization = async (req,res) => {
     try {
         
         const {name,description} = req.body;
-        
+        // console.log(req.body);
         if(!name || !description) {
             
             return res.status(404).json({
@@ -18,9 +18,10 @@ exports.addSpecialization = async (req,res) => {
             description : description,
         });
 
-        return res.status(202).json({
+        return res.status(200).json({
             success : true,
             message : 'speciality added',
+            details
         });
     }catch(error) {
         return res.status(500).json({

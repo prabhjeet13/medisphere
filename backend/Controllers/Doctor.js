@@ -262,7 +262,7 @@ exports.getAllDoctors = async (req,res) => {
 exports.getAllDoctorsPending = async (req,res) => {
     try {
 
-        const details = await Doctor.find({status : 'active'}).exec();
+        const details = await Doctor.find({status : 'pending'}).exec();
 
         if(!details) {
             return res.status(404).json({

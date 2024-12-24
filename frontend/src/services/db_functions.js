@@ -31,6 +31,8 @@ export const signup = async (formData,navigate) => {
             response = await axios.post(patient.signup,formData);
         }else if(formData.account_type === "doctor") {
             response = await axios.post(doctor.signup,formData);
+        }else if(formData.account_type === "admin") {
+            response = await axios.post(admin.signup,formData);
         }
         if(!response.data.success) {
             throw new Error('not able to sign up');

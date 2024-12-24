@@ -36,7 +36,7 @@ const Sidebar = () => {
                     
                    { 
                       userData.account_type !== "admin" && (
-                            <div>
+                            <div className='flex flex-col gap-8'>
                                 <Link to= {'/dashboard/nextappointments'}>
                                     <div className= {`text-center p-1 underline border-2`}>Next Appointments</div>
                                 </Link>
