@@ -10,6 +10,7 @@ export const doctor = {
     getalldoctorspending : 'http://localhost:4001/api/v1/doctor/getalldoctorspending',
     editdoctorAvailaility : 'http://localhost:4001/api/v1/doctor/editdoctoravailability',
     deleteDoctoravAilability : 'http://localhost:4001/api/v1/doctor/deletedoctoravailability',
+    done_appointment : 'http://localhost:4001/api/v1/doctor/done_appointment',
 }
 
 export const patient = {
@@ -25,7 +26,8 @@ export const patient = {
 export const admin = {
     signup : 'http://localhost:4001/api/v1/admin/signupadmin',
     signin : 'http://localhost:4001/api/v1/admin/signinadmin',
-    givepermission : 'http://localhost:4001/api/v1/admin/givepermission'
+    givepermission : 'http://localhost:4001/api/v1/admin/givepermission',
+    editdetails : 'http://localhost:4001/api/v1/admin/editadmindetails'
 }
 
 export const specialization =  {

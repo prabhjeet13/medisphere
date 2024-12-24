@@ -4,7 +4,7 @@ import {toast} from 'react-hot-toast';
 import {useForm} from 'react-hook-form';
 import {specialization} from '../services/apis';
 import axios  from 'axios';
-import { editDoctor,editPatient } from '../services/db_functions';
+import { editAdmin, editDoctor,editPatient } from '../services/db_functions';
 const EditDetails = () => {
 
   const {editPermit, editData} = useSelector((state) => state.edit);
@@ -12,6 +12,7 @@ const EditDetails = () => {
   const [specialities,setSpecialities] = useState([]);
   const dispatch  = useDispatch();
   const {token} = useSelector((state) => state.profile);
+  
   useEffect(() => {
       const fetch  = async () => {
         try {
@@ -21,14 +22,20 @@ const EditDetails = () => {
                 toast.success('Medisphere - you can edit your data ...');
                 setValue('first_name',editData.first_name);
                 setValue('last_name',editData.last_name);
-                setValue('phone',editData.phone);
+                if(editData.account_type === "patient")
+                {
+                  setValue('phone',editData.phone);
+                }
                if(editData.account_type === "doctor")
                {
+                  setValue('phone',editData.phone);
                   setValue('about_me',editData.about_me);
                   setValue('amount',editData.amount);
                   setValue('license_no',editData.license_no);
                   setValue('location',editData.location);
                   setValue('specialization',editData.specialization.name);
+                  setValue('bank_account_number',editData.bank_account_number);
+                  setValue('ifsc_code',editData.ifsc_code);
                   const response = await axios.get(specialization.getall);
                   if(!response.data.success)
                   {
@@ -39,11 +46,11 @@ const EditDetails = () => {
                }   
             }
         }catch(error) {
-          toast.error('Medisphere -server down ...')
+          toast.error('Medisphere - server down ...')
         }
       }
       fetch();
-  },[editPermit,editData,setValue]);
+  },[editPermit,editData]);
 
   const submitHandler = async (data) => {
         if(editPermit) 
@@ -54,15 +61,15 @@ const EditDetails = () => {
                     editDoctor(data,dispatch,token);
               }else if(editData.account_type === "patient"){
                     editPatient(data,dispatch,token);
+              }else if(editData.account_type === "admin") {
+                    editAdmin(data,dispatch,token);
               } 
         }
   }
 
-
-
   return (
     <div className='w-[82%] p-2 font-mono text-white flex flex-col gap-4'>
-          <p className='text-xl underline'>Edit Details </p>
+          <p className='text-xl font-bold underline'> Edit Details </p>
           <form onSubmit = {handleSubmit(submitHandler)} className='border-4 border-orange-800 flex flex-col gap-4 p-2 w-[90%]'>
                     
                 <div className='flex flex-row gap-2 items-center'>
@@ -84,14 +91,18 @@ const EditDetails = () => {
                       </div>
                 </div>   
 
-                <div className='flex flex-col'>
-                  <label htmlFor='phone' className='text-white'> 
-                      mobile
-                  </label>
-                  <input  type = 'text' id = 'phone' name = 'phone' placeholder='phone' className='border-2 border-black py-2 rounded-md px-3 text-black' required
-                    { ...register('phone') }
-                  />
-                </div>
+                {
+                  editData && editData.account_type !== "admin" && (
+                    <div className='flex flex-col'>
+                            <label htmlFor='phone' className='text-white'> 
+                                mobile
+                            </label>
+                            <input  type = 'text' id = 'phone' name = 'phone' placeholder='phone' className='border-2 border-black py-2 rounded-md px-3 text-black' required
+                              { ...register('phone') }
+                            />
+                    </div>
+                  )
+                }
 
                 {
                   editData && editData.account_type === "doctor" && (
@@ -143,6 +154,24 @@ const EditDetails = () => {
                                         </label>
                                         <input  type = 'text' id = 'amount' name = 'amount' placeholder='amount' className='border-2 border-black py-2 rounded-md px-3 text-black' required
                                           { ...register('amount') }
+                                        />
+                                     </div>
+
+                                      <div className='flex flex-col'>
+                                        <label htmlFor='bank_account_number' className='text-white'> 
+                                           bank_account_no
+                                        </label>
+                                        <input  type = 'text' id = 'bank_account_number' name = 'bank_account_number' placeholder='bank_account_number' className='border-2 border-black py-2 rounded-md px-3 text-black' required
+                                          { ...register('bank_account_number') }
+                                        />
+                                     </div>
+
+                                      <div className='flex flex-col'>
+                                        <label htmlFor='ifsc_code' className='text-white'> 
+                                           ifsc_code
+                                        </label>
+                                        <input  type = 'text' id = 'ifsc_code' name = 'ifsc_code' placeholder='ifsc_code' className='border-2 border-black py-2 rounded-md px-3 text-black' required
+                                          { ...register('ifsc_code') }
                                         />
                                      </div>
                     

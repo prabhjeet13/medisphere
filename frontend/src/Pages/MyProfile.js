@@ -30,7 +30,7 @@ const MyProfile = () => {
       <div className='text-white'>
                 <p className='underline text-xl font-bold'>Contact Details</p>
                 <p className='text-white text-lg font-semibold'>email : {userData.email}</p>
-                <p className='text-white text-lg font-semibold'>mobile : {userData.phone}</p>
+                { userData.account_type !== "admin" && <p className='text-white text-lg font-semibold'>mobile : {userData.phone} </p> }
       </div>
 
         {userData.account_type === "doctor" && (<>
@@ -47,6 +47,14 @@ const MyProfile = () => {
           <div className='text-white'>
                   <p className='underline text-xl font-bold'>Charges</p>
                   <p className='text-white text-lg font-semibold'>{userData.amount}</p>
+          </div>
+          <div className='text-white'>
+                  <p className='underline text-xl font-bold'>Bank_account_number</p>
+                  <p className='text-white text-lg font-semibold'>{userData.bank_account_number}</p>
+          </div>
+          <div className='text-white'>
+                  <p className='underline text-xl font-bold'>Ifsc_code</p>
+                  <p className='text-white text-lg font-semibold'>{userData.ifsc_code}</p>
           </div>
           <div className='text-white'>
                   <p className='underline text-xl font-bold'>About Me</p>

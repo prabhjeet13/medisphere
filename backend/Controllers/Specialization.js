@@ -4,7 +4,7 @@ exports.addSpecialization = async (req,res) => {
     try {
         
         const {name,description} = req.body;
-
+        
         if(!name || !description) {
             
             return res.status(404).json({

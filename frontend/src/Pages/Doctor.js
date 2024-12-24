@@ -148,6 +148,7 @@ const Doctor = () => {
               <div className=' text-black bg-yellow-400 p-2 w-fit rounded-full font-mono font-semibold text-lg transition-all duration-200 hover:scale-90 cursor-pointer'>
                     Chat with Me ?
               </div>
+              
               <div className='text-white'>
                 <p className='text-xl underline font-bold'>Doctor Name</p>
                 <div className='text-lg flex items-center font-semibold gap-2'>

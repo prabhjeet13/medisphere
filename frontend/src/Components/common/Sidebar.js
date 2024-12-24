@@ -29,20 +29,44 @@ const Sidebar = () => {
                     {
                         userData.account_type === "doctor" && (
                             <Link to = {'/dashboard/edit_time_slots'}>
-                                <div className= {`text-center p-1 underline border-2`}>Edit Availability time slots</div>
+                                <div className= {`text-center p-1 underline border-2`}>Add Availability time slots</div>
                             </Link>
                         )
                     }
                     
-                    <Link to= {'/dashboard/nextappointments'}>
-                        <div className= {`text-center p-1 underline border-2`}>Next Appointments</div>
-                    </Link>
+                   { 
+                      userData.account_type !== "admin" && (
+                            <div>
+                                <Link to= {'/dashboard/nextappointments'}>
+                                    <div className= {`text-center p-1 underline border-2`}>Next Appointments</div>
+                                </Link>
 
-                    <Link to= {'/dashboard/appointments_done'}>
-                        <div  className= {`text-center p-1 underline border-2`}>Appointments done</div>
-                    </Link>
+                                <Link to= {'/dashboard/appointments_done'}>
+                                    <div  className= {`text-center p-1 underline border-2`}>Appointments done</div>
+                                </Link>
+                            </div>
+                      )                   
+                    } 
+                   { 
+                      userData.account_type === "admin" && (
+                            <div className='flex flex-col gap-8'>
+                                <div>
+                                    <Link to= {'/dashboard/addspecialization'}>
+                                        <div className= {`text-center p-1 underline border-2`}>Add Specialization </div>
+                                    </Link>
+                                </div>
+                                
+                                <div>
+                                    <Link to= {'/dashboard/givepermission'}>
+                                        <div className= {`text-center p-1 underline border-2`}> Give Permission to doctors ? </div>
+                                    </Link>
+                                </div>
+                            </div>
+                      )                   
+                    } 
                 </div>
             )
+            
         }
     </div>
   )

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {signin} from '../services/db_functions';
 const Login = () => {
+    
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [acc,setacc] = useState('patient');
@@ -14,6 +15,7 @@ const Login = () => {
       email: "",
       password : "",
     });
+
     const textboxvaluechange = (e) => {
       setFormData( (prev) => ({
          ...prev,
@@ -26,6 +28,7 @@ const Login = () => {
           signin(formData,dispatch,navigate);
         //   signIn(navigate,formData,dispatch);
     }
+    
   return (
     <div className='mx-auto max-w-[1260px] md:flex md:flex-row md:mt-5 justify-evenly items-center md:gap-3 flex flex-col-reverse sm:gap-52 sm:mt-36 mt-10'>
   

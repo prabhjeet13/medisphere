@@ -221,7 +221,14 @@ exports.appointment_verifyPayment = async(req,res) => {
             await sendMail(doctor.email,` MediSphere - appointment with ${patient.first_name}`,`${appointment}`);    
             await sendMail(patient.email,` MediSphere - appointment with Dr. ${doctor.first_name}`,`${appointment}`);    
             
-            
+            const doctordetails = await Doctor.findById(doctorId).populate('patients').populate('specialization').populate('appointments').exec();
+            const patientdetails = await Patient.findById(userid).populate({
+                path: 'appointments', 
+                populate: [
+                    { path: 'doctor' },    
+                    { path: 'patient' },   
+                ],
+            }).exec();
             const payoutDetails = {
                 account_number: doctor.bank_account_number, 
                 ifsc: doctor.ifsc_code,  
@@ -241,20 +248,14 @@ exports.appointment_verifyPayment = async(req,res) => {
                   message: 'Payment confirmed but payout failed',
                 });
               }
-            const doctordetails = await Doctor.findById(doctorId).populate('patients').populate('specialization').populate('appointments').exec();
-            const patientdetails = await Patient.findById(userid).populate({
-                path: 'appointments', 
-                populate: [
-                    { path: 'doctor' },    
-                    { path: 'patient' },   
-                ],
-            }).exec();
+
             return res.status(200).json({
                 success: true,
                 message : 'payment verified',
                 Doctordetails  : doctordetails,
                 Patientdetails : patientdetails,
             })
+          
         }
         return res.status(500).json({
             success: false,

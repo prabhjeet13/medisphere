@@ -1,6 +1,6 @@
 const Doctor = require('../Models/Doctor');
 const Specialization = require('../Models/Specialization');
-
+const Appointment = require('../Models/Appointment');
 exports.getMyPatients = async (req,res) => {
     try {
 
@@ -262,7 +262,7 @@ exports.getAllDoctors = async (req,res) => {
 exports.getAllDoctorsPending = async (req,res) => {
     try {
 
-        const details = await Doctor.find({status : 'pending'}).exec();
+        const details = await Doctor.find({status : 'active'}).exec();
 
         if(!details) {
             return res.status(404).json({
@@ -385,6 +385,50 @@ exports.myAppointments = async (req,res) => {
         });
     }
 }
+
+exports.doneAppointment = async (req,res) => {
+    try {
+        const {appointmentId} = req.body;
+        const {userid} = req.user;
+
+        if(!appointmentId || !userid)
+        {
+            return res.status(404).json({
+                success : false,
+                message : 'fetched ',
+                details,
+            });
+        }
+
+        const app = await Appointment.findById(appointmentId);
+
+        app.status = 'done';
+        
+        await app.save();
+
+        const details = Doctor.findById(userid).populate('patients').populate('specialization').populate({
+            path: 'appointments', 
+            populate: [
+                { path: 'doctor' },    
+                { path: 'patient' },   
+            ],
+        }).exec();
+
+        // console.log(app);
+
+        return res.status(200).json({
+            success : true,
+            message : 'fetched ok',
+            details,
+        });
+    }catch(error) {
+        return res.status(500).json({
+            success : false,
+            message : 'error at fetching next appoints',
+        });
+    }
+}
+
 
 
 

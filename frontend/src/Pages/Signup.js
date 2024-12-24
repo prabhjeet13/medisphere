@@ -29,7 +29,6 @@ const Signup = () => {
       }
       fetchsp();
     },[]);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showpassword,setshowpassword] = useState(false);
@@ -50,7 +49,11 @@ const Signup = () => {
       status : "",
       location : "",
       about_me : "",
+      bank_account_number : "",
+      ifsc_code : "",
     });
+
+
     const textboxvaluechange = (e) => {
       setFormData( (prev) => ({
         ...prev,
@@ -162,6 +165,19 @@ const Signup = () => {
                       amount
                     </label>
                     <input onChange = {textboxvaluechange} value = {formData.amount} type = 'text' id = 'amount' name = 'amount' placeholder='amount' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
+                 </div>
+
+                  <div className='flex flex-col md:w-[85%]'>
+                    <label htmlFor='bank_account_number' className='text-white'> 
+                      bank_account_number
+                    </label>
+                    <input onChange = {textboxvaluechange} value = {formData.bank_account_number} type = 'text' id = 'bank_account_number' name = 'bank_account_number' placeholder='bank_account_number' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
+                 </div>
+                  <div className='flex flex-col md:w-[85%]'>
+                    <label htmlFor='ifsc_code' className='text-white'> 
+                    ifsc_code
+                    </label>
+                    <input onChange = {textboxvaluechange} value = {formData.ifsc_code} type = 'text' id = 'ifsc_code' name = 'ifsc_code' placeholder='ifsc_code' className='border-2 border-black py-2 rounded-md px-3 text-black' required/>
                  </div>
 
                   <div className='flex flex-col md:w-[85%]'>

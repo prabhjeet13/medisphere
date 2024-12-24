@@ -46,7 +46,7 @@ const Navbar = () => {
                 {
                         userData && (
                                 <div className='uppercase bg-yellow-500 text-black rounded-full p-2 w-fit relative group'>
-                                        {userData.first_name[0]}{userData.last_name[0]}
+                                        MS
                                         <div className='absolute bg-white text-black right-0 top-5 group-hover:visible invisible m-2 p-2'>
                                                 <p className = 'p-2' onClick={() => navigate('/dashboard/myprofile')}>
                                                         dashboard

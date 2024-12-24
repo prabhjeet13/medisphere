@@ -1,7 +1,7 @@
 
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
-import {otp,doctor,patient} from './apis';
+import {otp,doctor,patient, admin} from './apis';
 
 import { setSignupData } from '../slices/signupslice';
 import { setUserData , setToken} from '../slices/profileSlice';
@@ -61,11 +61,18 @@ export const signin = async (formData,dispatch,navigate) => {
             localStorage.setItem('token',JSON.stringify(response.data.token));
             dispatch(setUserData(response.data.doctordetails));
             dispatch(setToken(response.data.token));
+        }else if(formData.account_type === "admin"){
+            response = await axios.post(admin.signin,formData);
+            localStorage.setItem('userData',JSON.stringify(response.data.admindetails));
+            localStorage.setItem('token',JSON.stringify(response.data.token));
+            dispatch(setUserData(response.data.admindetails));
+            dispatch(setToken(response.data.token));
         }
+
         if(!response.data.success) {
             throw new Error('not able to login in');
         }
-        toast.success('loginSuccessfully');
+        toast.success('login-Successfully');
         navigate('/dashboard/myprofile');
     }catch(error) {
         toast.error('something wrong - try again later');
@@ -132,6 +139,24 @@ export const editPatient = async (formData,dispatch,token) => {
     const tid = toast.loading('wait ...');
     try {
         const response = await axios.post(patient.editdetails,{... formData,token});
+        if(!response.data.success)
+        {
+            throw new Error('server down');
+        }else {
+            localStorage.setItem('userData',JSON.stringify(response.data.details));
+            dispatch(setUserData(response.data.details));
+            toast.success('done');
+        }
+    }catch(error)
+    {
+        toast.error('Medisphere - server down ... try again');
+    }
+    toast.dismiss(tid);
+}
+export const editAdmin = async (formData,dispatch,token) => {
+    const tid = toast.loading('wait ...');
+    try {
+        const response = await axios.post(admin.editdetails,{... formData,token});
         if(!response.data.success)
         {
             throw new Error('server down');
