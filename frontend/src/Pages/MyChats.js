@@ -56,7 +56,7 @@ const MyChats = () => {
                                         userData.account_type === "patient" && (<span>Dr. {con.participants[1].first_name} {con.participants[1].last_name}</span>)
                                     }
                                     {
-                                        userData.account_type === "doctor" && (<span>Patient {con.participants[1].first_name} {con.participants[1].last_name}</span>)
+                                        userData.account_type === "doctor" && (<span>Patient {con.participants[0].first_name} {con.participants[0].last_name}</span>)
                                     }
                             </div> 
                     )

@@ -49,16 +49,18 @@ const Chat = () => {
               text,
               senderModel : `${userData.account_type === "doctor" ? "Doctor" : "Patient"}`,
               receiverModel : `${userData.account_type === "doctor" ? "Patient" : "Doctor"}`,
+              receiverId,
             }
             console.log(ob);
-            // const response = await axios.post(`http://localhost:4001/api/v1/messages/sendmessage/${receiverId}`,ob);
-            // if(!response.data.success)
-            // {
-            //    throw new Error('not able to do');
-            // }else {
-            //   toast.success('message send done');
-            //   setmessages(response.data.messages);
-            // }
+            const response = await axios.post(`http://localhost:4001/api/v1/messages/sendmessage`,ob);
+            if(!response.data.success)
+            {
+               throw new Error('not able to do');
+            }else {
+              toast.success('message send done');
+              setmessages(response.data.messages);
+              setText("");
+            }
         }catch(error)
         {
               toast.error('Medisphere - send later please');
@@ -85,15 +87,16 @@ const Chat = () => {
         messages && messages.length > 0 &&(
           messages.map( (mess) => {
             return (
-              <div className= {`${userData._id === mess.senderId ? "text-right" : "text-left"} border-2 border-black p-2 flex flex-col`}>
-                     <p className = 'text-purple-800 text-lg font-mono'>{mess.senderId.account_type} : {mess.senderId.first_name}</p> 
+              <div className= {`${userData._id === mess.senderId._id ? "text-right" : "text-left"} border-2 border-black p-2 flex flex-col`}>
+                     <p className = 'text-purple-800 text-lg font-mono'>{mess.senderId.account_type} {mess.senderId.first_name}:</p> 
                      <p className = 'text-black text-lg font-mono'>{mess.text}</p>
+                     {/* <p>{mess.createdAt.split('T')[0]}, {mess.createdAt.split('T')[1].split('.')[0]}</p> */}
               </div>
             )
           }))
       }
       <form className='flex flex-col gap-2 items-center p-2 w-full'>
-            <input className = 'rounded-md w-full text-black p-1' type='text' name='text' id = 'text' onChange={(e) => setText(e.target.value)}/>
+            <input className = 'rounded-md w-full text-black p-1' type='text' name='text' value = {text} id = 'text' onChange={(e) => setText(e.target.value)}/>
             <button onClick = {submitHandler} type = 'submit' className='text-black bg-green-500 w-full rounded-full p-1 transition-all duration-200 hover:scale-90'>send your message</button>
       </form>
       </div>

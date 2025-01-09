@@ -5,7 +5,7 @@ const {sendMessage,getMessage,getmyconversation} = require('../Controllers/Messa
 const {auth} = require('../Middlewares/Auth');
 
 router.post('/getmessages',auth,getMessage);
-router.post('/sendmessage/:receiverid',auth,sendMessage);
+router.post('/sendmessage',auth,sendMessage);
 router.post('/getmyconversation',auth,getmyconversation);
 
 module.exports = router;

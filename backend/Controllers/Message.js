@@ -9,10 +9,11 @@ exports.sendMessage = async (req,res) => {
 
     try {
 
-        const {receiverId} = req.params; // receiverid
+        console.log(req.body);
+        // const {receiverId} = req.params; // receiverid
         const senderId  = req.user.userid; // sender id , user is login will send the message
-        const {senderModel,receiverModel,text}  = req.body; 
-
+        const {senderModel,receiverModel,text,receiverId}  = req.body; 
+        
         let conversation_data = await Conversation.findOne(
         {
             participants : {$all : [senderId,receiverId]},

@@ -18,6 +18,7 @@ const Navbar = () => {
         localStorage.removeItem('editData');
         navigate('/');
   }
+
   return (
     <div className='mx-auto w-11/12 max-w-[1260px] flex items-center justify-evenly text-black p-4 m-2 bg-gradient-to-r from-blue-700 to-slate-900'>
             <div onClick = { () => navigate('/')} className='font-mono text-xl font-bold  text-white bg-black p-2 rounded-full cursor-pointer transition-all duration-200 hover:scale-90'>
