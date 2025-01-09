@@ -96,6 +96,11 @@ const DoctorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    conversations : [{
+        type : mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref : "Conversation"
+    }] 
 })
 
 module.exports = mongoose.model('Doctor',DoctorSchema);

@@ -21,6 +21,8 @@ import AdminSignin from './Pages/AdminSignin';
 import AdminSignup from './Pages/AdminSignup';
 import AddSpecialization from './Pages/AddSpecialization';
 import GivePermission from './Pages/GivePermission';
+import MyChats from './Pages/MyChats';
+import Chat from './Pages/Chat';
 function App() {
   return (
     <div className='mx-auto bg-gradient-to-r from-blue-700 to-blue-900 min-h-[100vh]'>
@@ -44,7 +46,9 @@ function App() {
                   <Route path='appointments_done' element = {<AppoinmentsDone/>}> </Route>
                   <Route path='addspecialization' element = {<AddSpecialization/>}> </Route>
                   <Route path='givepermission' element = {<GivePermission/>}> </Route>
+                  <Route path='chats' element = {<MyChats/>}> </Route>
               </Route>
+              <Route path='/chat/:senderId/:receiverId' element = {<Chat/>}> </Route>
               <Route path='/otp' element = {<Otp/>}></Route>
         </Routes>
     </div>  

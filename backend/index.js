@@ -23,19 +23,18 @@ app.use(express.json());
 
 //routes
 const adminRoutes = require('./Routes/Admin');
-const patientRoutes = require('./Routes/Patient');;
+const patientRoutes = require('./Routes/Patient');
 const specializationRoutes = require('./Routes/Specialization');
 const doctorRoutes = require('./Routes/Doctor');
 const otpRoutes = require('./Routes/Otp');
+const messageRoutes = require('./Routes/message');
+
 app.use('/api/v1/admin',adminRoutes);
 app.use('/api/v1/patient',patientRoutes);
 app.use('/api/v1/specialization',specializationRoutes);
 app.use('/api/v1/doctor',doctorRoutes);
 app.use('/api/v1/otp',otpRoutes);
-
-
-
-
+app.use('/api/v1/messages',messageRoutes);
 
 // listening port
 app.listen(PORT, () => {

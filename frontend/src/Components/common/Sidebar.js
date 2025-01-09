@@ -64,6 +64,9 @@ const Sidebar = () => {
                             </div>
                       )                   
                     } 
+                    <Link to= {'/dashboard/chats'}>
+                        <div className= {`text-center p-1 underline border-2`}>my chats</div>
+                    </Link>
                 </div>
             )
             

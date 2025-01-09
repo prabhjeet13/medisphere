@@ -145,9 +145,11 @@ const Doctor = () => {
             <div className='flex flex-col gap-6 mt-10 w-[60%] border-8 border-orange-900 p-2'>
               {/* Doctor Details */}
 
-              <div className=' text-black bg-yellow-400 p-2 w-fit rounded-full font-mono font-semibold text-lg transition-all duration-200 hover:scale-90 cursor-pointer'>
-                    Chat with Me ?
-              </div>
+              { userData && (
+                  <div onClick = { () => navigate(`/chat/${userData._id}/${doctordata._id}`)} className=' text-black bg-yellow-400 p-2 w-fit rounded-full font-mono font-semibold text-lg transition-all duration-200 hover:scale-90 cursor-pointer'>
+                      Chat with Me ?
+                </div>
+              ) }
               
               <div className='text-white'>
                 <p className='text-xl underline font-bold'>Doctor Name</p>

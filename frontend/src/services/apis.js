@@ -1,5 +1,3 @@
-import { do_appointment } from "./db_functions"
-
 export const doctor = {
     signup : 'http://localhost:4001/api/v1/doctor/signupdoctor',
     signin : 'http://localhost:4001/api/v1/doctor/signindoctor',
@@ -37,4 +35,10 @@ export const specialization =  {
 
 export const otp = {
     sendotp : 'http://localhost:4001/api/v1/otp/sendotp',
+}
+
+export const conversation = {
+    getMyconversation : 'http://localhost:4001/api/v1/messages/getmyconversation',
+    getMessage : 'http://localhost:4001/api/v1/messages/getmessages',
+    sendMessage : 'http://localhost:4001/api/v1/messages/sendmessage',
 }

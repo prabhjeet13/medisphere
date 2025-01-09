@@ -38,6 +38,11 @@ const PatientSchema = new mongoose.Schema({
     appointments : [{
             type : mongoose.Schema.Types.ObjectId,
             ref : 'Appointment' 
+    }],
+    conversations : [{
+            type : mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref : "Conversation"
     }]
 })
 
