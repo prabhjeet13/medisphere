@@ -371,7 +371,7 @@ exports.myAppointments = async (req,res) => {
     try {
         const {userid} = req.user;
 
-        const details = await Appointment.find({doctor : userid});
+        const details = await Appointment.find({doctor : userid}).populate('doctor').populate('patient').exec();
 
         return res.status(200).json({
             success : true,
@@ -406,7 +406,7 @@ exports.doneAppointment = async (req,res) => {
         
         await app.save();
 
-        const details = Doctor.findById(userid).populate('patients').populate('specialization').populate({
+        const details = await Doctor.findById(userid).populate('patients').populate('specialization').populate({
             path: 'appointments', 
             populate: [
                 { path: 'doctor' },    

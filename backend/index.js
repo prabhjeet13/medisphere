@@ -1,9 +1,10 @@
 // server building
 const express = require('express');
-const app = express();
+// const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 
+const {app,server} = require('./socket/Socket');
 
 const cors = require('cors');
 app.use(
@@ -36,15 +37,16 @@ app.use('/api/v1/doctor',doctorRoutes);
 app.use('/api/v1/otp',otpRoutes);
 app.use('/api/v1/messages',messageRoutes);
 
+const {dbConnect} = require('./Config/Database');
+
 // listening port
-app.listen(PORT, () => {
+server.listen(PORT, () => {
+    dbConnect();
     console.log(`listening on ${PORT}`);
 });
 
 
 // db
-const {dbConnect} = require('./Config/Database');
-dbConnect();
 
 
 

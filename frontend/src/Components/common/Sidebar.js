@@ -44,6 +44,10 @@ const Sidebar = () => {
                                 <Link to= {'/dashboard/appointments_done'}>
                                     <div  className= {`text-center p-1 underline border-2`}>Appointments done</div>
                                 </Link>
+
+                                <Link to= {'/dashboard/chats'}>
+                                    <div className= {`text-center p-1 underline border-2`}>my chats</div>
+                                </Link>
                             </div>
                       )                   
                     } 
@@ -64,9 +68,7 @@ const Sidebar = () => {
                             </div>
                       )                   
                     } 
-                    <Link to= {'/dashboard/chats'}>
-                        <div className= {`text-center p-1 underline border-2`}>my chats</div>
-                    </Link>
+                    
                 </div>
             )
             

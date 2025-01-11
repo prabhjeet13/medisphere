@@ -2,14 +2,17 @@ import React from 'react'
 import img1 from '../assets/images/doctorimage3.jpg'
 import img2 from '../assets/images/doctorimage4.jpg'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 const About = () => {
   const navigate = useNavigate(); 
+  const {userData} = useSelector((state) => state.profile);
+
   return (
     <div className='mx-auto border-2 border-red-400 w-11/12 max-w-[1260px] mt-3 min-h-[100vh] flex-col'>
             
-            <div onClick = {() => navigate('/signup')} className='mx-auto font-mono font-semibold text-white p-3 bg-orange-950 w-fit rounded-full m-2 cursor-pointer transition-all duration-200 hover:scale-90 text-lg'> 
+            {!userData && <div onClick = {() => navigate('/signup')} className='mx-auto font-mono font-semibold text-white p-3 bg-orange-950 w-fit rounded-full m-2 cursor-pointer transition-all duration-200 hover:scale-90 text-lg'> 
                $ Consult a Doctor $
-            </div>
+            </div>}
             <div className='flex gap-3 items-center justify-center p-2 m-2 mt-3'>
                 <img src= {img1} width={400} className='rounded-md'/>
                 <img src= {img2} width ={400} className='rounded-md'/>

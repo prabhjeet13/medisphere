@@ -9,6 +9,7 @@ export const doctor = {
     editdoctorAvailaility : 'http://localhost:4001/api/v1/doctor/editdoctoravailability',
     deleteDoctoravAilability : 'http://localhost:4001/api/v1/doctor/deletedoctoravailability',
     done_appointment : 'http://localhost:4001/api/v1/doctor/done_appointment',
+    my_appointments : 'http://localhost:4001/api/v1/doctor/my_appointments'
 }
 
 export const patient = {
@@ -19,6 +20,7 @@ export const patient = {
     appointment : 'http://localhost:4001/api/v1/patient/appointment_capturePayment',
     SEND_PAYMENT_EMAIL : 'http://localhost:4001/api/v1/patient/sendpaymentsuccess',
     VERIFY_PAYMENT_API : 'http://localhost:4001/api/v1/patient/verifysignature',
+    my_appointments : 'http://localhost:4001/api/v1/patient/my_appointments'
 }
 
 export const admin = {

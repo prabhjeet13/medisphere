@@ -17,7 +17,7 @@ router.post('/deletedoctoravailability',auth,isDoctor,deleteDoctorAvailability);
 router.post('/getmypatients',auth,isDoctor,getMyPatients);
 router.post('/editdoctoravailability',auth,isDoctor,editDoctorAvailability);
 router.post('/done_appointment',auth,isDoctor,doneAppointment);
-router.post('/myappointments',auth,isDoctor,myAppointments)
+router.post('/my_appointments',auth,isDoctor,myAppointments)
 
 
 module.exports = router;

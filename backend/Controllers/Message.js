@@ -9,7 +9,7 @@ exports.sendMessage = async (req,res) => {
 
     try {
 
-        console.log(req.body);
+        // console.log(req.body);
         // const {receiverId} = req.params; // receiverid
         const senderId  = req.user.userid; // sender id , user is login will send the message
         const {senderModel,receiverModel,text,receiverId}  = req.body; 
@@ -78,7 +78,6 @@ exports.sendMessage = async (req,res) => {
         conversation_data.messages.push(new_message._id);
         await conversation_data.save();
 
-
         const conversation = await Conversation.findOne(
             {
                 _id : conversation_data._id
@@ -90,6 +89,17 @@ exports.sendMessage = async (req,res) => {
             }
         }).exec();
 
+        const M = await Message.findById(new_message._id).populate("senderId").exec();
+
+        const io = req.app.get("io");
+        if (io) {
+          io.to(`user_${receiverId}`).emit("receive_message", {
+            senderId : M.senderId,
+            text,
+            conversationId: conversation_data._id,
+            createdAt : new_message.createdAt,
+          });
+        }
 
 
         return res.status(200).json({
@@ -157,7 +167,6 @@ exports.getMessage = async(req,res) => {
         })
     }
 }
-
 
 exports.getmyconversation = async(req,res) => {
     try {

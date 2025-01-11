@@ -14,7 +14,7 @@ router.post('/appointment_capturepayment',auth,isPatient,appointment_capturePaym
 router.post("/verifysignature",auth,isPatient,appointment_verifyPayment);
 router.post("/sendpaymentsuccess",auth,isPatient,sendPaymentSuccess);
 
-router.post('/myappointments',myAppointments)
+router.post('/my_appointments',auth,isPatient,myAppointments)
 
 
 

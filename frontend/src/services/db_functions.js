@@ -273,6 +273,7 @@ const verifyPayment = async(bodyData,token,navigate,dispatch) => {
         dispatch(setUserData(response.data.Patientdetails));
         localStorage.setItem('userData',JSON.stringify(response.data.Patientdetails));
         toast.success("payment succesfull");
+        navigate('/dashboard/nextappointments')
     }catch(error)
     {
         toast.error('payment not done');

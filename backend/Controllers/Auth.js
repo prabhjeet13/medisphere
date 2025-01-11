@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const Otp = require('../Models/Otp');
 const otpgen = require('otp-generator');
 const {sendMail} = require('../Utils/Nodemailer');
+const Specialization = require('../Models/Specialization');
 require('dotenv').config();
 
 exports.sendOtp = async(req,res) => {
@@ -199,51 +200,63 @@ exports.signupPatient = async (req,res) => {
 exports.signupDoctor = async (req,res) => {
     try {
         const {first_name,last_name,email,phone,account_type,password,location, confirmPassword,license_no,specialization,otp,amount,about_me} = req.body;
-
         if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount || !location || !about_me)
-        {
-            return res.status(404).json({
-                success : false,
-                message : 'give all details',
-            });
-        }
+            {
+                return res.status(404).json({
+                    success : false,
+                    message : 'give all details',
+                });
+            }
+            
+            const otpStored = await Otp.findOne({email : email}).sort({createdAt: -1});
+            // console.log(otpStored);
+            
+            if(!otpStored || (otp !== otpStored.otp))
+                {
+                    return res.status(402).json({
+                        success : false,
+                        message : 'otp is not valid',
+                    });
+                }
+        
+                
+                if(password !== confirmPassword) {
+                    return res.status(500).json({
+                        success : false,
+                        message : 'both passwords are not matched',
+                    });
+                }
+                
+                const hashedpassword = await bcrypt.hash(password,10);
+                
+                const sp = await Specialization.findOne({name : specialization});
 
-        const otpStored = await Otp.findOne({email : email}).sort({createdAt: -1});
-        // console.log(otpStored);
+                if(!sp)
+                {
+                    return res.status(404).json({
+                        success : false,
+                        message : 'give all details',
+                    });    
+                }
 
-        if(!otpStored || (otp !== otpStored.otp))
-        {
-            return res.status(402).json({
-                success : false,
-                message : 'otp is not valid',
-            });
-        }
+                const doctordetails = await Doctor.create(
+                    { 
+                        first_name : first_name,
+                        last_name : last_name,
+                        email : email,
+                        account_type : account_type,
+                        status : 'pending',
+                        password : hashedpassword,
+                        phone: phone,
+                        license_no : license_no,
+                        specialization : sp._id,
+                        amount : amount,
+                        location : location,
+                        about_me : about_me,
+                    });
 
-        if(password !== confirmPassword) {
-            return res.status(500).json({
-                success : false,
-                message : 'both passwords are not matched',
-            });
-        }
-
-        const hashedpassword = await bcrypt.hash(password,10);
-
-        const doctordetails = await Doctor.create(
-            { 
-                first_name : first_name,
-                last_name : last_name,
-                email : email,
-                account_type : account_type,
-                status : 'pending',
-                password : hashedpassword,
-                phone: phone,
-                license_no : license_no,
-                specialization : specialization,
-                amount : amount,
-                location,
-                about_me,
-        });
-
+                console.log('Doctor Created:', doctordetails);
+        // console.log(req.body);
         await sendMail(doctordetails.email,'MediShpere - Notice','No Worries, Your data is with us, Wait for approval from our admins. Till then , You can not access our website.');
         
         return res.status(200).json({

@@ -229,25 +229,26 @@ exports.appointment_verifyPayment = async(req,res) => {
                     { path: 'patient' },   
                 ],
             }).exec();
-            const payoutDetails = {
-                account_number: doctor.bank_account_number, 
-                ifsc: doctor.ifsc_code,  
-                amount: amount * 100,  
-                currency: 'INR',
-                method: 'IMPS',  
-                purpose: 'Appointment Payment'
-              };
+          
+            // const payoutDetails = {
+            //     account_number: doctor.bank_account_number, 
+            //     ifsc: doctor.ifsc_code,  
+            //     amount: amount * 100,  
+            //     currency: 'INR',
+            //     method: 'IMPS',  
+            //     purpose: 'Appointment Payment'
+            //   };
         
-              try {
-                const payoutResponse = await razorpay.payouts.create(payoutDetails);
-                console.log("Payout Response: ", payoutResponse);
-              } catch (payoutError) {
-                console.error("Error in payout: ", payoutError);
-                return res.status(500).json({
-                  success: false,
-                  message: 'Payment confirmed but payout failed',
-                });
-              }
+            //   try {
+            //     const payoutResponse = await razorpay.payouts.create(payoutDetails);
+            //     console.log("Payout Response: ", payoutResponse);
+            //   } catch (payoutError) {
+            //     console.error("Error in payout: ", payoutError);
+            //     return res.status(500).json({
+            //       success: false,
+            //       message: 'Payment confirmed but payout failed',
+            //     });
+            //   }
 
             return res.status(200).json({
                 success: true,
@@ -318,7 +319,7 @@ exports.myAppointments = async (req,res) => {
     try {
         const {userid} = req.user;
 
-        const details = await Appointment.find({patient : userid});
+        const details = await Appointment.find({patient : userid}).populate('doctor').populate('patient').exec();
 
         return res.status(200).json({
             success : true,

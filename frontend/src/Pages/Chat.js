@@ -4,12 +4,35 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { conversation } from '../services/apis';
 import { useSelector } from 'react-redux';
+import { io } from "socket.io-client";
+const socket = io("http://localhost:4001");
 const Chat = () => {
 
   // fetch senderId and receiverId
   const { senderId, receiverId } = useParams();
   const [messages,setmessages] = useState([]);
   const {userData,token} = useSelector((state) => state.profile);
+
+
+  useEffect(() => {
+    if(userData){
+      socket.emit("join_room", `user_${userData._id}`);
+    }
+}, [userData._id]);
+
+  useEffect(() => {
+    // Listen for incoming messages
+    socket.on("receive_message", (message) => {
+      console.log(message);
+      setmessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, []);
+
+
 
   useEffect(() => {
     const fetch = async () => {
