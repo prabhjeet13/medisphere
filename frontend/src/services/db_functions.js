@@ -38,7 +38,7 @@ export const signup = async (formData,navigate) => {
             throw new Error('not able to sign up');
         }
         toast.success('data saved');
-        navigate('/login');
+        navigate('/signin');
     }catch(error) {
         toast.error('try again later');
     }

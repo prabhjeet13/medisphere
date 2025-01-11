@@ -199,8 +199,8 @@ exports.signupPatient = async (req,res) => {
 }
 exports.signupDoctor = async (req,res) => {
     try {
-        const {first_name,last_name,email,phone,account_type,password,location, confirmPassword,license_no,specialization,otp,amount,about_me} = req.body;
-        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount || !location || !about_me)
+        const {first_name,last_name,email,phone,account_type,password,location, confirmPassword,license_no,specialization,otp,amount,about_me,bank_account_number,ifsc_code} = req.body;
+        if(!first_name || !last_name || !email || !account_type || !phone || !password || !confirmPassword || !license_no || !specialization || !otp || !amount || !location || !about_me || !bank_account_number || !ifsc_code)
             {
                 return res.status(404).json({
                     success : false,
@@ -213,7 +213,7 @@ exports.signupDoctor = async (req,res) => {
             
             if(!otpStored || (otp !== otpStored.otp))
                 {
-                    return res.status(402).json({
+                    return res.status(401).json({
                         success : false,
                         message : 'otp is not valid',
                     });
@@ -221,7 +221,7 @@ exports.signupDoctor = async (req,res) => {
         
                 
                 if(password !== confirmPassword) {
-                    return res.status(500).json({
+                    return res.status(400).json({
                         success : false,
                         message : 'both passwords are not matched',
                     });
@@ -237,25 +237,26 @@ exports.signupDoctor = async (req,res) => {
                         success : false,
                         message : 'give all details',
                     });    
-                }
+                }   
+                console.log('yah tk');
+                const doctordetails = await Doctor.create({
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    account_type: account_type,
+                    status: 'pending',
+                    password: hashedpassword,
+                    phone: phone,
+                    license_no: license_no,
+                    specialization: sp._id,
+                    amount: amount,
+                    location: location,
+                    about_me: about_me,
+                    ifsc_code : ifsc_code,
+                    bank_account_number : bank_account_number,
+                });
 
-                const doctordetails = await Doctor.create(
-                    { 
-                        first_name : first_name,
-                        last_name : last_name,
-                        email : email,
-                        account_type : account_type,
-                        status : 'pending',
-                        password : hashedpassword,
-                        phone: phone,
-                        license_no : license_no,
-                        specialization : sp._id,
-                        amount : amount,
-                        location : location,
-                        about_me : about_me,
-                    });
-
-                console.log('Doctor Created:', doctordetails);
+                console.log('Doctor Created:');
         // console.log(req.body);
         await sendMail(doctordetails.email,'MediShpere - Notice','No Worries, Your data is with us, Wait for approval from our admins. Till then , You can not access our website.');
         
@@ -268,6 +269,7 @@ exports.signupDoctor = async (req,res) => {
         return res.status(500).json({
             success : false,
             message : 'server error at sign up doctor',
+            error : `${error}`,
         });
     }
 }
