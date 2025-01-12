@@ -9,7 +9,7 @@ const {app,server} = require('./socket/Socket');
 const cors = require('cors');
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: "https://medisphere-rho.vercel.app",
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
     })
