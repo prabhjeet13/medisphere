@@ -73,7 +73,7 @@ const NextAppointments = () => {
   }
 
   return (
-    <div className='w-[82%] flex flex-col font-mono text-white'>
+    <div className='sidebar:w-[82%] w-full flex flex-col font-mono text-white'>
           <p className='p-2 m-2 underline text-white font-bold text-xl'> Next Appointments </p>
           {
              userData && appointments && appointments.length > 0 && appointments.map((app,index) => {

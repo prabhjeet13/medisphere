@@ -85,13 +85,13 @@ const Signup = () => {
       )
     }
   return (
-    <div className='mx-auto w-11/12 max-w-[1260px] md:flex md:flex-row items-center justify-evenly md:mt-5 flex flex-col-reverse gap-36'>
+    <div className='mx-auto w-11/12 max-w-[1260px] flex flex-row items-center justify-evenly mt-5 gap-36'>
 
         {/* form section */}
-         <div className='w-[50%] flex flex-col gap-2'>
+         <div className='navbar:w-[50%] flex flex-col gap-2 w-full'>
             <p className='font-bold font-mono text-lg text-black uppercase'>Join Us to insure a good health !!!</p>
             <form className='flex flex-col gap-5 font-mono font-semibold text-xl' onSubmit={submitHandler}>
-                <div className='md:flex md:flex-row gap-2 flex flex-col rounded-full bg-red-900 w-fit'>
+                <div className='flex flex-row gap-2 flex-wrap items-center justify-center rounded-full bg-red-900 w-fit'>
                       <div onClick = {() => setacc('patient')} className={`${acc === "patient" ? 'bg-blue-900' : 'bg-transparent'} text-white rounded-full p-2 m-2 cursor-pointer transition-all duration-200 hover:scale-90`}>
                         Patient    
                       </div>
@@ -99,7 +99,7 @@ const Signup = () => {
                           Doctor
                       </div>
                 </div>
-                <div className='md:flex md:flex-row gap-2 flex flex-col'>
+                <div className='navbar:flex navbar:flex-row gap-2 flex flex-col'>
                       <div className='flex flex-col gap-1'>
                           <label htmlFor='first_name' className='text-white'>
                               first_name
@@ -113,6 +113,7 @@ const Signup = () => {
                           <input onChange = {textboxvaluechange} value = {formData.last_name} type = 'text' id = 'last_name' name='last_name' placeholder='last_name' className='py-2 rounded-md px-1 text-black bg-white border-2 border-black' required/>
                       </div>
                 </div>
+
                 <div className='flex flex-col md:w-[85%]'>
                   <label htmlFor='email' className='text-white'> 
                       email
@@ -214,7 +215,7 @@ const Signup = () => {
             </form>
          </div>
         {/* image part*/}
-        <div className='w-[40%] relative md:visible invisible'>
+        <div className='navbar:w-[40%] relative navbar:visible invisible'>
           <img src= {imagebg} className='absolute -right-3 -top-40 rounded-md'/>
           <img src =  {`${acc == "doctor" ? imagessignupdoc : imagessignuppatients }`} className='absolute -top-36 rounded-md'/>
         </div>

@@ -82,7 +82,7 @@ const AllDoctors = () => {
             
             {/* specialitions */}
 
-            <div className='grid grid-cols-3 w-full gap-2 mt-2 p-5'>
+            <div className='doctor-div:grid doctor-div:grid-cols-3 w-full gap-2 mt-2 p-5 grid-cols-1'>
                 {
                     doctors.length > 0 && (
                         doctors.map( (doctor) => {

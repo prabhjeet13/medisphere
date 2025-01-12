@@ -68,7 +68,7 @@ const EditDetails = () => {
   }
 
   return (
-    <div className='w-[82%] p-2 font-mono text-white flex flex-col gap-4'>
+    <div className='sidebar:w-[82%] w-full p-2 font-mono text-white flex flex-col gap-4'>
           <p className='text-xl font-bold underline'> Edit Details </p>
           <form onSubmit = {handleSubmit(submitHandler)} className='border-4 border-orange-800 flex flex-col gap-4 p-2 w-[90%]'>
                     

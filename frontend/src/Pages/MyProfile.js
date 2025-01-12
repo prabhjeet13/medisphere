@@ -14,7 +14,7 @@ const MyProfile = () => {
 
 
   return (
-    <div className='w-[82%] p-2 font-mono text-white flex flex-col gap-4'>
+    <div className='sidebar:w-[82%] w-full p-2 font-mono text-white flex flex-col gap-4 flex-wrap'>
       <p className='font-bold text-xl underline'>
           My Profile
       </p>
@@ -29,7 +29,7 @@ const MyProfile = () => {
 
       <div className='text-white'>
                 <p className='underline text-xl font-bold'>Contact Details</p>
-                <p className='text-white text-lg font-semibold'>email : {userData.email}</p>
+                <p className='text-white text-lg font-semibold '>email : {userData.email}</p>
                 { userData.account_type !== "admin" && <p className='text-white text-lg font-semibold'>mobile : {userData.phone} </p> }
       </div>
 

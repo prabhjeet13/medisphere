@@ -27,7 +27,7 @@ const Edit_Time_Slots = () => {
 
 
   return (
-    <div className='w-[82%] text-white font-mono p-2 flex flex-col gap-5 m-2'>
+    <div className='sidebar:w-[82%] w-full text-white font-mono p-2 flex flex-col gap-5 m-2'>
         <p className='text-xl underline font-bold m-2'> Time Slots </p>    
 
         <form onSubmit = {handleSubmit(submitHandler)} className='p-3 border-2 border-orange-900 flex flex-col gap-4'>

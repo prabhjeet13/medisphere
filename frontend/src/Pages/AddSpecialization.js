@@ -40,7 +40,7 @@ const AddSpecialization = () => {
 
 
   return (
-    <div className='w-[82%] p-2 m-2 font-mono'>
+    <div className='sidebar:w-[82%] w-full p-2 m-2 font-mono'>
           <p className='text-xl text-white font-bold underline'>Add Specialization</p> 
           <form onSubmit = {submitHandler} className='p-2 m-2 border-2 border-red-400 gap-4 flex flex-col'>
                     <div className='flex flex-col gap-2'>

@@ -8,13 +8,13 @@ const Home = () => {
   const navigate = useNavigate();  
   const {userData} = useSelector((state) => state.profile);
   return (
-    <div className='mx-auto border-2 border-red-400 w-11/12 max-w-[1260px] mt-3 min-h-[100vh] flex-col'>
+    <div className='mx-auto border-2 border-red-400 w-11/12 max-w-[1260px] mt-3 min-h-[100vh] flex-col flex'>
             
            { !userData && <div onClick = {() => navigate('/signup')} className='mx-auto font-mono font-semibold text-white p-3 bg-orange-950 w-fit rounded-full m-2 cursor-pointer transition-all duration-200 hover:scale-90 text-lg'> 
                $ Doctor - Join Us $
             </div> }
 
-            <div className ='flex gap-3 items-center justify-center p-2 m-2 mt-3'>
+            <div className ='middle:flex middle:flex-row gap-3 items-center justify-center p-2 m-2 mt-3 flex flex-col'>
                 <img src= {img1} width={400} className='rounded-md'/>
                 <img src= {img2} width ={400} className='rounded-md'/>
             </div>
@@ -24,7 +24,7 @@ const Home = () => {
                 <p className='mt-3'>MediSphere redefines the patient-doctor relationship by making it more accessible and interactive. With features like secure messaging, detailed appointment management, and personalized notifications, we’re building a bridge for better communication and healthier outcomes. Join us to transform your healthcare journey today!</p>
             </div>
 
-            <div className ='w-[90%] mx-auto border-2 border-red grid grid-cols-3 grid-rows-2 mt-5'>
+            <div className ='w-[90%] mx-auto border-2 border-red grid navbar:grid-cols-3 navbar:grid-rows-2 mt-5 grid-cols-1'>
                   <div className='bg-green-400 p-4 m-2 font-mono text-lg text-center'>"Good health begins with clear communication MediSphere makes it effortless."</div>  
                   <div className='bg-green-300 p-4 m-2 font-mono text-lg text-center'></div>  
                   <div className='bg-green-400 p-4 m-2 font-mono text-lg text-center'>"Empowering doctors and patients with tools to connect, collaborate, and care better every day."</div>  

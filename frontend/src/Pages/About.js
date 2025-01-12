@@ -13,7 +13,7 @@ const About = () => {
             {!userData && <div onClick = {() => navigate('/signup')} className='mx-auto font-mono font-semibold text-white p-3 bg-orange-950 w-fit rounded-full m-2 cursor-pointer transition-all duration-200 hover:scale-90 text-lg'> 
                $ Consult a Doctor $
             </div>}
-            <div className='flex gap-3 items-center justify-center p-2 m-2 mt-3'>
+            <div className='middle:flex middle:flex-row gap-3 items-center justify-center p-2 m-2 mt-3 flex flex-col'>
                 <img src= {img1} width={400} className='rounded-md'/>
                 <img src= {img2} width ={400} className='rounded-md'/>
             </div>
@@ -23,12 +23,12 @@ const About = () => {
                 <p className='mt-3'>Our mission is to redefine the way healthcare works by focusing on convenience and connection. By offering innovative features like secure chatting, appointment tracking, and personalized notifications, we aim to enhance communication and build trust between patients and doctors. At MediSphere, we’re committed to creating a healthier world—one interaction at a time.</p>
             </div>
 
-            <div className='w-[90%] mx-auto border-2 border-red grid grid-cols-3 grid-rows-2 mt-5'>
-                  <div className='bg-green-300 p-4 m-2 font-mono text-lg text-center'></div>  
-                  <div className='bg-cyan-400 p-4 m-2 font-mono text-lg text-center'>"Connecting care with convenience, because your health matters most."</div>  
-                  <div className='bg-green-300 p-4 m-2 font-mono text-lg text-center'></div>  
-                  <div className='bg-cyan-400 p-4 m-2 font-mono text-lg text-center'>"Empowering healthier lives through innovation and trust."</div>  
-                  <div className='bg-green-300 p-4 m-2 font-mono text-lg text-center'></div>  
+            <div className='w-[90%] mx-auto border-2 border-red grid navbar:grid-cols-3 navbar:grid-rows-2 mt-5 grid-cols-1'>
+                  <div className='bg-green-300 p-4 m-2 font-mono navbar:text-lg navbar:text-center text-start text-sm'></div>  
+                  <div className='bg-cyan-400 p-4 m-2 font-mono navbar:text-lg navbar:text-center text-start text-sm'>"Connecting care with convenience, because your health matters most."</div>  
+                  <div className='bg-green-300 p-4 m-2 font-mono navbar:text-lg navbar:text-center text-start text-sm'></div>  
+                  <div className='bg-cyan-400 p-4 m-2 font-mono navbar:text-lg navbar:text-center text-start text-sm'>"Empowering healthier lives through innovation and trust."</div>  
+                  <div className='bg-green-300 p-4 m-2 font-mono navbar:text-lg navbar:text-center text-start text-sm'></div>  
                   {/* <div className='bg-green-300 p-4 m-2 font-mono text-lg text-center'></div>   */}
             </div>
     </div>

@@ -44,7 +44,7 @@ const MyChats = () => {
 
   // on clicking any conversation go to chat page of sender and receiver
   return (
-    <div className='w-[82%] flex flex-col font-mono text-white'>    
+    <div className='sidebar:w-[82%] w-full flex flex-col font-mono text-white'>    
         <p className='p-2 m-2 underline text-white font-bold text-xl uppercase'> My Chats </p>
         {
             conversations && conversations.length > 0 && (

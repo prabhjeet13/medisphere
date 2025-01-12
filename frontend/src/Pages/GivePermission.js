@@ -57,7 +57,7 @@ const GivePermission = () => {
   }
 
   return (
-    <div className='w-[82%] font-mono flex flex-col gap-2'>
+    <div className='sidebar:w-[82%] w-full font-mono flex flex-col gap-2'>
           {
              doctors && doctors.map((doctor,index) => {
                  return (
