@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import { conversation } from '../services/apis';
 import { useSelector } from 'react-redux';
 import { io } from "socket.io-client";
-const socket = io("http://localhost:4001");
+// const socket = io("http://localhost:4001");
+const socket = io("https://medisphere-ydwu.onrender.com");
 const Chat = () => {
 
   // fetch senderId and receiverId
