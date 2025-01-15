@@ -76,7 +76,8 @@ const Chat = () => {
               receiverId,
             }
             console.log(ob);
-            const response = await axios.post(`http://localhost:4001/api/v1/messages/sendmessage`,ob);
+            // const response = await axios.post(`http://localhost:4001/api/v1/messages/sendmessage`,ob);
+            const response = await axios.post(`https://medisphere-ydwu.onrender.com/api/v1/messages/sendmessage`,ob);
             if(!response.data.success)
             {
                throw new Error('not able to do');
