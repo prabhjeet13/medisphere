@@ -58,7 +58,7 @@ const Chat = () => {
       toast.dismiss(toastid);  
     }
     fetch();
-  },[senderId,receiverId]);
+  },[patient,doctor]);
 
   const [text,setText] = useState('');
 
