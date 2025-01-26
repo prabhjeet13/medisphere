@@ -10,7 +10,7 @@ const socket = io("https://medisphere-ydwu.onrender.com");
 const Chat = () => {
 
   // fetch senderId and receiverId
-  const { senderId, receiverId } = useParams();
+  const { patient, doctor } = useParams();
   const [messages,setmessages] = useState([]);
   const {userData,token} = useSelector((state) => state.profile);
 
@@ -41,8 +41,8 @@ const Chat = () => {
       try {
          const ob = {
             token,
-            senderId,
-            receiverId
+            patient,
+            doctor 
          }
          const response = await axios.post(conversation.getMessage,ob);
          if(!response.data.success)
@@ -73,7 +73,9 @@ const Chat = () => {
               text,
               senderModel : `${userData.account_type === "doctor" ? "Doctor" : "Patient"}`,
               receiverModel : `${userData.account_type === "doctor" ? "Patient" : "Doctor"}`,
-              receiverId,
+              receiverId : `${userData.account_type === "doctor" ? patient : doctor}`,
+              patient,
+              doctor,
             }
             console.log(ob);
             // const response = await axios.post(`http://localhost:4001/api/v1/messages/sendmessage`,ob);

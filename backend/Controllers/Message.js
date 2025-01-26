@@ -12,25 +12,24 @@ exports.sendMessage = async (req,res) => {
         // console.log(req.body);
         // const {receiverId} = req.params; // receiverid
         const senderId  = req.user.userid; // sender id , user is login will send the message
-        const {senderModel,receiverModel,text,receiverId}  = req.body; 
+        const {senderModel,receiverModel,text,receiverId,patient,doctor}  = req.body; 
         
         let conversation_data = await Conversation.findOne(
         {
-            participants : {$all : [senderId,receiverId]},
+            participants : {$all : [patient,doctor]},
         });
 
         if(!conversation_data)
         {
             // first time conversation
             conversation_data = await Conversation.create({
-                participants : [senderId,receiverId],
-                participantsModel: [senderModel, receiverModel]
+                participants : [patient,doctor],
+                participantsModel: ["Patient", "Doctor"]
             });
 
-            if(senderModel === "Doctor" && receiverModel === "Patient")
-            {
+
                 await Doctor.findByIdAndUpdate(
-                    {_id : senderId},
+                    {_id : doctor},
                     {
                         $push : {
                             conversations : conversation_data._id,
@@ -38,31 +37,13 @@ exports.sendMessage = async (req,res) => {
                     }, {new : true}
                 ) 
                 await Patient.findByIdAndUpdate(
-                    {_id : receiverId},
-                    {
-                        $push : {
-                            conversations : conversation_data._id,
-                        }
-                    }, {new : true}
-                ) 
-            }else if(senderModel === "Patient" && receiverModel === "Doctor"){
-                await Doctor.findByIdAndUpdate(
-                    {_id : receiverId},
-                    {
-                        $push : {
-                            conversations : conversation_data._id,
-                        }
-                    }, {new : true}
-                ) 
-                await Patient.findByIdAndUpdate(
-                    {_id : senderId},
+                    {_id : patient},
                     {
                         $push : {
                             conversations : conversation_data._id,
                         }
                     }, {new : true}
                 )
-            }
 
         }
 
@@ -123,9 +104,9 @@ exports.sendMessage = async (req,res) => {
 exports.getMessage = async(req,res) => {
     try {
         
-        const {senderId,receiverId} = req.body;
+        const {patient,doctor} = req.body;
 
-        if(!senderId || !receiverId)
+        if(!patient || !doctor)
         {
             return res.status(404).json({
                 success: false,
@@ -136,7 +117,7 @@ exports.getMessage = async(req,res) => {
        
         const conversation_data = await Conversation.findOne(
             {
-                participants : {$all : [senderId,receiverId]}
+                participants : {$all : [patient,doctor]}
             }
         ).populate({
             path : 'messages',

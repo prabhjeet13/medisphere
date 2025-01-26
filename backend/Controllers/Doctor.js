@@ -401,6 +401,7 @@ exports.doneAppointment = async (req,res) => {
         }
 
         const app = await Appointment.findById(appointmentId);
+        //Appointment.findByIdAndUpdate({id},{day,start_time,end_time},{new:true}); Ap
 
         app.status = 'done';
         

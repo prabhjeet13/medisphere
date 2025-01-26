@@ -48,7 +48,7 @@ function App() {
                   <Route path='givepermission' element = {<GivePermission/>}> </Route>
                   <Route path='chats' element = {<MyChats/>}> </Route>
               </Route>
-              <Route path='/chat/:senderId/:receiverId' element = {<Chat/>}> </Route>
+              <Route path='/chat/:patient/:doctor' element = {<Chat/>}> </Route>
               <Route path='/otp' element = {<Otp/>}></Route>
         </Routes>
     </div>  
